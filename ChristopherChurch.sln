@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChristopherChurch.Domain", "ChristopherChurch.Domain\ChristopherChurch.Domain.csproj", "{DE17071E-E101-45FF-B287-E89CBEE0710C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChristopherChurch.Data", "ChristopherChurch.Data\ChristopherChurch.Data.csproj", "{71E15EFA-0A20-4CE8-A1DD-DC00C261ABAF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE17071E-E101-45FF-B287-E89CBEE0710C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE17071E-E101-45FF-B287-E89CBEE0710C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE17071E-E101-45FF-B287-E89CBEE0710C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE17071E-E101-45FF-B287-E89CBEE0710C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71E15EFA-0A20-4CE8-A1DD-DC00C261ABAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E15EFA-0A20-4CE8-A1DD-DC00C261ABAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E15EFA-0A20-4CE8-A1DD-DC00C261ABAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E15EFA-0A20-4CE8-A1DD-DC00C261ABAF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E0915D0B-917A-462F-A22B-A44C628C6E59}
+	EndGlobalSection
+EndGlobal
