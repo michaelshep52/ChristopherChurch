@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChristopherChurch.Domain", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChristopherChurch.Data", "ChristopherChurch.Data\ChristopherChurch.Data.csproj", "{71E15EFA-0A20-4CE8-A1DD-DC00C261ABAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChristopherChurch.UI", "ChristopherChurch.UI\ChristopherChurch.UI.csproj", "{5D73CA0D-F1D2-414D-810A-83308FEDA138}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{71E15EFA-0A20-4CE8-A1DD-DC00C261ABAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71E15EFA-0A20-4CE8-A1DD-DC00C261ABAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71E15EFA-0A20-4CE8-A1DD-DC00C261ABAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D73CA0D-F1D2-414D-810A-83308FEDA138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D73CA0D-F1D2-414D-810A-83308FEDA138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D73CA0D-F1D2-414D-810A-83308FEDA138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D73CA0D-F1D2-414D-810A-83308FEDA138}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
