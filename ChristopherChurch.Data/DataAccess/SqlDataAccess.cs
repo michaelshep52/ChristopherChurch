@@ -3,10 +3,11 @@ using System.Data;
 using System.Data.SqlClient;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using ChristopherChurch.Data.Interfaces;
 
 namespace ChristopherChurch.Data
 {
-    public class SqlDataAccess
+    public class SqlDataAccess : ISqlDataAccess
     {
         private readonly IConfiguration _config;
 
