@@ -1,8 +1,8 @@
 ﻿using ChristopherChurch.Data.Models;
 
-namespace ChristopherChurch.Data.Interfaces
+namespace ChristopherChurch.Data.DataAccess
 {
-    public interface IPeopleData
+    public interface IPersonData
     {
         Task<List<PersonModel>> GetPeople();
         Task InsertPerson(PersonModel person);

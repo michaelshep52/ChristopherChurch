@@ -1,14 +1,14 @@
 ﻿using System;
-using ChristopherChurch.Data.Models;
 using ChristopherChurch.Data.Interfaces;
+using ChristopherChurch.Data.Models;
 
 namespace ChristopherChurch.Data.DataAccess
 {
-    public class PeopleData : IPeopleData
+    public class PersonData : IPersonData
     {
         private readonly ISqlDataAccess _db;
 
-        public PeopleData(ISqlDataAccess db)
+        public PersonData(ISqlDataAccess db)
         {
             _db = db;
         }
