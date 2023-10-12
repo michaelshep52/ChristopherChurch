@@ -1,10 +1,8 @@
-﻿using System;
-namespace ChristopherChurch.Data.Interfaces
+﻿namespace ChristopherChurch.Data.Interfaces
 {
     public interface ISqlDataAccess
     {
-        Task<List<T>> LoadData<T, U>(string sql, U parameters);
-        Task SaveData<T>(string sql, T parameters);
+        Task<IEnumerable<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionId = "Default");
+        Task SaveData<T>(string storedProcedure, T parameters, string connectionId = "Default");
     }
 }
-

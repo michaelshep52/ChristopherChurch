@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
 using ChristopherChurch.Data.Interfaces;
 
 namespace ChristopherChurch.Data
@@ -11,30 +12,33 @@ namespace ChristopherChurch.Data
     {
         private readonly IConfiguration _config;
 
-        public string ConnectionStringName { get; set; } = "Default";
-
         public SqlDataAccess(IConfiguration config)
         {
             _config = config;
         }
 
-        public async Task<List<T>> LoadData<T, U>(string sql, U parameters)
+        public async Task<IEnumerable<T>> LoadData<T, U>(
+            string storedProcedure,
+            U parameters,
+            string connectionId = "Default")
         {
-            string connectionString = _config.GetConnectionString(ConnectionStringName);
+            using IDbConnection connection = new NpgsqlConnection(_config.GetConnectionString(connectionId));
 
-            using (IDbConnection connection = new SqlConnection(connectionString))
-            {
-                var data = await connection.QueryAsync<T>(sql, parameters);
-                return data.ToList();
-            }
+            return await connection.QueryAsync<T>(
+                storedProcedure, parameters,
+                commandType: CommandType.StoredProcedure);
         }
-        public async Task SaveData<T>(string sql, T parameters)
-        {
-            string connectionString = _config.GetConnectionString(ConnectionStringName);
 
-            using (IDbConnection connection = new SqlConnection(connectionString))
+        public async Task SaveData<T>(
+            string storedProcedure,
+            T parameters,
+            string connectionId = "Default")
+        {
+            using IDbConnection connection = new NpgsqlConnection(_config.GetConnectionString(connectionId));
             {
-                await connection.ExecuteAsync(sql, parameters);
+                await connection.ExecuteAsync(
+                storedProcedure, parameters,
+                commandType: CommandType.StoredProcedure);
             }
         }
     }
