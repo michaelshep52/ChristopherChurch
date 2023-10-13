@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using ChristopherChurch.UI.Data;
-using ChristopherChurch.Data;
+using ChristopherChurch.Data.DbAccess;
+using ChristopherChurch.Data.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
-builder.Services.AddTransient<IPeopleData, PeopleData>();
+builder.Services.AddTransient<IPersonData, PersonData>();
 
 var app = builder.Build();
 

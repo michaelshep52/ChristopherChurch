@@ -1,0 +1,15 @@
+﻿@page "/Person"
+
+@using ChristopherChurch.Data
+@using ChristopherChurch.Data.Models
+
+@inject IPersonData _db 
+
+<h1>Person Page</h1>
+
+<h4>Current users</h4>
+
+@code {
+    private List<PersonModel> person;
+}
+
