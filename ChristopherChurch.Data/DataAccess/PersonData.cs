@@ -21,8 +21,8 @@ namespace ChristopherChurch.Data.DataAccess
 
         public Task InsertPerson( PersonModel person)
         {
-            string sql = @"insert into persons (first_name, last_name, gender, date_of_birth)
-                                    values (@first_name, @last_name, @gender, @date_of_birth);";
+            string sql = @"insert into persons (person_id, first_name, last_name, gender, email_address)
+                                    values (@person_id, @first_name, @last_name, @gender, @email_address);";
             return _db.SaveData(sql, person);
         }
         /*  public Task<IEnumerable<PersonModel>> GetPersons() =>

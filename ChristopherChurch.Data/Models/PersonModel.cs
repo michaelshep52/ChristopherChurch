@@ -3,10 +3,11 @@ namespace ChristopherChurch.Data.Models
 {
     public class PersonModel
     {
-        public required string FirstName { get; set; }
-        public required string LastName { get; set; }
-        public required string Gender { get; set; }
-        public DateTime DateofBirth { get; set; }
+        public  int PersonId { get; set; }
+        public  string FirstName { get; set; }
+        public  string LastName { get; set; }
+        public  string Gender { get; set; }
+        public string EmailAddress { get; set; }
     }
 }
 

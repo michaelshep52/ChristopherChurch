@@ -1,7 +1,37 @@
 ﻿@page "/BaptismGallery"
 
-<h3>Baptism Photo Gallery</h3>
+<h3 class="text-primary">Baptism Photo Gallery</h3>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <ul>
+                @foreach (var baptism in baptismModels)
+                {
+                    <li>
+                        <img src="@baptism.Path" alt="@baptism.AltText" />
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
 
 
 @code {
+
+    private List<BaptismGalleryModel> baptismModels = new List<BaptismGalleryModel>();
+
+    protected override void OnInitialized()
+    {
+        baptismModels.Add(new BaptismGalleryModel { Path = "file:///Users/michaelshepherd/Projects/ChristopherChurch/ChristopherChurch.UI/Addison%20copy.jpg", AltText = "Addison Baptism" });
+        baptismModels.Add(new BaptismGalleryModel { Path = "BaptismPhotos/Aubry.jpg", AltText = "Aubry Baptism" });
+        baptismModels.Add(new BaptismGalleryModel { Path = "BaptismPhotos/Brittnay.jpg", AltText = "Brittnay Baptism" });
+        baptismModels.Add(new BaptismGalleryModel { Path = "BaptismPhotos/Gabby.jpg", AltText = "Gabby Baptism" });
+        baptismModels.Add(new BaptismGalleryModel { Path = "BaptismPhotos/Heather.jpg", AltText = "Heather Baptism" });
+        baptismModels.Add(new BaptismGalleryModel { Path = "BaptismPhotos/Kayah.jpg", AltText = "Kayah Baptism" });
+        baptismModels.Add(new BaptismGalleryModel { Path = "BaptismPhotos/Mavrick.jpg", AltText = "Mavrick Baptism" });
+        baptismModels.Add(new BaptismGalleryModel { Path = "BaptismPhotos/Tyra.jpg", AltText = "Tyra Baptism" });
+    }
+
+
     }

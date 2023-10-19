@@ -1,15 +1,83 @@
 ﻿@page "/Person"
 
-@using ChristopherChurch.Data
+@using ChristopherChurch.Data.DataAccess
 @using ChristopherChurch.Data.Models
+@using ChristopherChurch.UI.Models
 
-@inject IPersonData _db 
+
+@inject IPersonData _db
 
 <h1>Person Page</h1>
 
-<h4>Current users</h4>
+<h4>Insert New Person</h4>
+<EditForm Model="@newPerson" OnValidSubmit="@InsertPerson">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+    <InputText id="firstName" @bind-Value="newPerson.FirstName"></InputText>
+    <InputText id="lastName" @bind-Value="newPerson.LastName"></InputText>
+    <InputText id="gender" @bind-Value="newPerson.Gender"></InputText>
+    <InputText id="emailaddress" @bind-Value="newPerson.EmailAddress"></InputText>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</EditForm>
+
+<h4>Current People</h4>
+@if (people is null)
+{
+    <p><em>Loading. . .</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>PersonId</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Gender Name</th>
+                <th>EmailAddress</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var person in people)
+            {
+                <tr>
+                    <td>@person.PersonId</td>
+                    <td>@person.FirstName</td>
+                    <td>@person.LastName</td>
+                    <td>@person.Gender</td>
+                    <td>@person.EmailAddress</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
-    private List<PersonModel> person;
+    private List<PersonModel> people;
+    private DisplayPersonModel newPerson = new DisplayPersonModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        people = await _db.GetPeople();
+    }
+
+    private async Task InsertPerson()
+    {
+        PersonModel p = new PersonModel
+        {
+            PersonId = newPerson.PersonId,
+            FirstName = newPerson.FirstName,
+            LastName = newPerson.LastName,
+            Gender = newPerson.Gender,
+            EmailAddress = newPerson.EmailAddress
+        };
+        await _db.InsertPerson(p);
+        people.Add(p);
+
+        newPerson = new DisplayPersonModel();
+    }
+
+
 }
 
