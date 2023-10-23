@@ -15,21 +15,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Models\" />
-    <None Remove="BaptismPhotos\" />
-    <None Remove="BaptismPhotos\Brittnay.jpg" />
-    <None Remove="BaptismPhotos\Kayah.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="BaptismPhotos\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="BaptismPhotos\Brittnay.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="BaptismPhotos\Kayah.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Update="Pages\BaptismGallery.razor">
@@ -37,25 +25,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Update="BaptismPhotos\Addison.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="BaptismPhotos\Brittnay.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="BaptismPhotos\Heather.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="BaptismPhotos\Tyra.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="BaptismPhotos\Gabby.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="BaptismPhotos\Aubry.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="BaptismPhotos\Mavrick.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Addison copy.jpg">
