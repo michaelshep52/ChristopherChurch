@@ -13,6 +13,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddTransient<IPersonData, PersonData>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

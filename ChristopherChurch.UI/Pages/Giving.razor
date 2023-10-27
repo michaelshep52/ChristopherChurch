@@ -1,0 +1,69 @@
+﻿@page "/Giving"
+
+<h3>Giving</h3>
+
+<form @onsubmit="HandlePayment">
+    <label for="cardElement">
+        Credit or debit card
+    </label>
+    <div id="cardElement">
+        <!-- A Stripe Element will be inserted here. -->
+    </div>
+
+    <!-- Used to display form errors. -->
+    <div id="card-errors" role="alert"></div>
+
+    <button type="submit">Submit Payment</button>
+</form>
+
+@code {
+    private Stripe.StripeJs.Stripe stripe;
+    private Stripe.StripeElements stripeElements;
+
+    protected override async Task OnInitializedAsync()
+    {
+        stripe = await Stripe.StripeJs.Stripe.CreateAsync("YOUR_STRIPE_PUBLIC_KEY");
+        stripeElements = stripe.Elements();
+
+        // Create an instance of the card Element.
+        var card = stripeElements.Create("card");
+
+        // Add an instance of the card Element into the `cardElement` div.
+        card.Mount("#cardElement");
+    }
+
+    @inject NavigationManager Navigation
+
+    private async Task HandlePayment(EventArgs eventArgs)
+    {
+        var card = stripeElements.Get("card");
+
+        var result = await stripe.CreatePaymentMethodAsync(
+            new Stripe.PaymentMethodCreateOptions
+            {
+                Type = "card",
+                Card = card,
+            }
+        );
+
+        if (result.Error != null)
+        {
+            // Display error to the user.
+            Console.WriteLine(result.Error.Message);
+        }
+        else
+        {
+            // PaymentMethod created successfully, handle the result.
+            // You can send the PaymentMethod.Id to your server to process the payment.
+            var paymentMethodId = result.PaymentMethod.Id;
+            Console.WriteLine($"PaymentMethod ID: {paymentMethodId}");
+
+            // Navigate to the success page.
+            Navigation.NavigateTo("/GivingSuccess");
+
+            // Here, you can send the payment method ID to your server for further processing.
+            // For a full payment flow, you would need a backend server to handle the payment processing.
+            // See Stripe documentation for server-side integration: https://stripe.com/docs/payments/integration-builder
+        }
+    }
+}
