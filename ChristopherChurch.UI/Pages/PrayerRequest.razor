@@ -1,54 +1,60 @@
 ﻿@page "/PrayerRequest"
 
-<EditForm Model="@prayer" OnValidSubmit="@SubmitPrayerRequest" id="PrayerForm">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    <ValidationSummary></ValidationSummary>
+    <div class="text-center">
+        <h3>Prayer Request</h3>
+    </div>
 
-    <label for="name">Full Name:</label>
-    <InputText type="text" id="name" @bind-Value="prayer.Name" name="name" required></InputText>
-
-    <label for="email">Your Email:</label>
-    <InputText type="email" id="email" @bind-Value="prayer.Email" name="email" required></InputText>
-
-    <label for="prayer">Your Prayer Request:</label>
-    <InputTextArea id="prayer" @bind-Value="prayer.Prayer" name="prayer" rows="4" required></InputTextArea>
-
-    <button type="submit" class="btn btn-primary" onclick="SubmitPrayerRequest()">Submit Prayer Request</button>
-
-</EditForm>
-
-@code {
-    private PrayerModel prayer = new PrayerModel();
-
-    @inject NavigationManager Navigation
-
-        private async Task SubmitPrayerRequest()
-        {
-            try
-            {
-                var message = new MimeKit.MimeMessage();
-                message.From.Add(new MimeKit.MailboxAddress("Your Name", "your-email@example.com"));
-                message.To.Add(new MimeKit.MailboxAddress("Michael", "michaelshep52@gmail.com"));
-                message.Subject = "New Comment";
-                message.Body = new MimeKit.TextPart("plain")
-                {
-                    Text = $"Name: {prayer.Name}\nEmail: {prayer.Email}\nComment: {prayer.Prayer}"
-                };
-
-                using (var client = new MailKit.Net.Smtp.SmtpClient())
-                {
-                    await client.ConnectAsync("smtp.your-email-provider.com", 587, false);
-                    await client.AuthenticateAsync("your-email@example.com", "your-email-password");
-                    await client.SendAsync(message);
-                    await client.DisconnectAsync(true);
-                }
-
-                Navigation.NavigateTo("/PrayerRequestSuccess");
-            }
-            catch (Exception ex)
-            {
-                Navigation.NavigateTo("/PrayerRequestError");
-            }
-        }
-
+    @if (isSubmitted)
+    {
+        <p>Thanks for your prayer request!</p>
     }
+    else
+    {
+        <div class="container-fluid py-3">
+            <div class="row">
+                <div class="col col-12 text-center">
+                    <p>We would love to pray for you. Please fill out this form below to inform the Church of your needs.</p>
+                </div>
+                <div class="col col-12 text-left m-0 py-2">
+                    <EditForm Model="@EmailService" OnValidSubmit="@SubmitForm" id="PrayerForm">
+                        <DataAnnotationsValidator></DataAnnotationsValidator>
+                        <ValidationSummary></ValidationSummary>
+                        <div>
+                            <label for="name">Full Name:</label>
+                            <InputText type="text" id="name" @bind-Value="name" name="name" placeholder="ex. Jane Doe" required></InputText>
+                        </div>
+                        <div class="pb-2">
+                            <label for="request">Your Prayer Request:</label>
+                            <br />
+                            <InputTextArea id="request" @bind-Value="request" name="request" rows="4" placeholder="ex. Pray for me." required></InputTextArea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="SubmitPrayerRequest()">Submit Prayer</button>
+
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    }
+
+    @code {
+        [Inject]
+        private IEmailService EmailService { get; set; }
+
+        private string name;
+        private string request;
+        private bool isSubmitted;
+
+        private async Task SubmitForm()
+        {
+            // Create a data object to send to the server
+            var requestInfo = new { Name = name, Request = request };
+
+            // Call the server-side API to send the email
+            await EmailService.SendPrayerRequestAsync("michaelshep52@gmail.com", "New Prayer Request from ",  name, request);
+
+            // Optionally, save the prayer request to a database
+
+            isSubmitted = true;
+        }
+    }
+

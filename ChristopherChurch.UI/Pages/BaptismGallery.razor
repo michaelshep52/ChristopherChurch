@@ -1,17 +1,8 @@
 ﻿@page "/BaptismGallery"
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col">
-                <h3>Baptism Photo Gallery</h3>
-            </div>
-            <div class="col col-lg-2">
-                <img src="@currentImage.Path" alt="@currentImage.AltText" style="max-width: 100%; max-height: 90vh;" />
-            </div>
-            <div class="col pt-2">
-                <button @onclick="ChangeImage" class="btn btn-primary rounded" style="max-width: 90%">Next Image</button>
-            </div>
+        <div class="baptism-gal-container">
+                <img src="@currentImage.Path" alt="@currentImage.AltText" class="img-fluid" />
+                <button @onclick="ChangeImage" class="changeimg-button btn btn-primary rounded" style="max-width: 90%">Next Image</button>
         </div>
-    </div>
 
     @code {
         private List<BaptismGalleryModel> baptismImages = new List<BaptismGalleryModel>

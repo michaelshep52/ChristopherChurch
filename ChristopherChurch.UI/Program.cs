@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using ChristopherChurch.UI.Data;
 using ChristopherChurch.Data.DbAccess;
 using ChristopherChurch.Data.DataAccess;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddTransient<IPersonData, PersonData>();
+
 
 
 var app = builder.Build();
