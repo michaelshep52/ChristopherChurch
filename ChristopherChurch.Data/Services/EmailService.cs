@@ -23,8 +23,7 @@ namespace ChristopherChurch.Data.Services
 
                 var builder = new BodyBuilder();
                 builder.TextBody =
-                    $"Prayer Request From: " +
-                    $"{name}\n\n{request}";
+                    $"Prayer Request From: \n\n{name}\n\n{request}";
 
                 message.Body = builder.ToMessageBody();
 
