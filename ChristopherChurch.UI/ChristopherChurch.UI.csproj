@@ -33,8 +33,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MimeKit" Version="4.2.0" />
-    <PackageReference Include="MailKit" Version="4.2.0" />
-    <PackageReference Include="Stripe.net" Version="43.0.0" />
+    <PackageReference Include="Stripe.net" Version="43.2.0" />
+    <PackageReference Include="MailKit" Version="4.3.0" />
   </ItemGroup>
 </Project>

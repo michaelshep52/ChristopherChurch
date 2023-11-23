@@ -1,8 +1,33 @@
 ﻿@page "/BaptismGallery"
-        <div class="baptism-gal-container">
-                <img src="@currentImage.Path" alt="@currentImage.AltText" class="img-fluid" />
-                <button @onclick="ChangeImage" class="changeimg-button btn btn-primary rounded" style="max-width: 90%">Next Image</button>
+
+<!--TODO!!! Change images on CANVA to a Wide view instead of tall view-->
+
+<div class="baptism-gal">
+    <div class="row">
+        <div class="col col-12">
+            <h4 class="text-center p-2">Recent Baptism's</h4>
         </div>
+        <div class="col col-12">
+            <img src="@currentImage.Path" alt="@currentImage.AltText" class="img-fluid"/>
+
+            <button @onclick="ChangeImage" class="btn btn-outline-primary rounded" style=" transform: translate(10%, -100%); ">
+                Next Image
+            </button>
+        </div>
+        <div class="col col-12">
+            <h6>Baptism is a public confession of faith!</h6>
+            <p>
+                Jesus challenged his disciples to confess their faith before others
+                and to walk before others as his disciples (Matthew 10: 32-3; 16: 13-17, 24).
+            </p>
+            <p>
+                Baptism presents an opportunity for new believers publicly display that Jesus is Lord and Savior.
+            </p>
+        </div>
+    </div>
+</div>
+
+
 
     @code {
         private List<BaptismGalleryModel> baptismImages = new List<BaptismGalleryModel>

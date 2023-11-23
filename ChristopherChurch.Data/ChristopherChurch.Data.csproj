@@ -7,20 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.15" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Dapper" Version="2.1.21" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="Npgsql" Version="7.0.6" />
-    <PackageReference Include="Stripe.net" Version="43.0.0" />
+    <PackageReference Include="Stripe.net" Version="43.2.0" />
+    <PackageReference Include="MailKit" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Models\" />
     <None Remove="DataAccess\" />
     <None Remove="DbAccess\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="DataAccess\" />
     <Folder Include="DbAccess\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>

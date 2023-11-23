@@ -4,6 +4,11 @@ using ChristopherChurch.UI.Data;
 using ChristopherChurch.Data.DbAccess;
 using ChristopherChurch.Data.DataAccess;
 using Stripe;
+using Microsoft.Extensions.DependencyInjection;
+using ChristopherChurch.UI.Models;
+using ChristopherChurch.UI.Pages;
+using System.Configuration;
+using ChristopherChurch.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +18,10 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddTransient<IPersonData, PersonData>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 
+//builder.Services.AddStripe(Configuration.GetSection("Stripe"));
 
 var app = builder.Build();
 
@@ -31,6 +38,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Stripe exception handling middleware
+//app.UseStripeExceptionHandler();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
