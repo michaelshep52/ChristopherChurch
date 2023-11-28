@@ -1,27 +1,44 @@
 ﻿@page "/BaptismGallery"
 
-<!--TODO!!! Change images on CANVA to a Wide view instead of tall view-->
+<!--TODO!!! Change Faunt and enlarge text for better user experience-->
 
-<div class="baptism-gal">
+<div class="baptism-gal pt-3">
     <div class="row">
-        <div class="col col-12">
+        <div class="col-12">
             <h4 class="text-center p-2">Recent Baptism's</h4>
         </div>
-        <div class="col col-12">
-            <img src="@currentImage.Path" alt="@currentImage.AltText" class="img-fluid"/>
+        <div class="col-md-6">
+            <img src="@currentImage.Path" alt="@currentImage.AltText" class="img-fluid" />
 
             <button @onclick="ChangeImage" class="btn btn-outline-primary rounded" style=" transform: translate(10%, -100%); ">
                 Next Image
             </button>
         </div>
-        <div class="col col-12">
-            <h6>Baptism is a public confession of faith!</h6>
+        <div class="col-md-6 px-5">
+            <h6 class="text-center py-3">Baptism is a public confession of faith!</h6>
             <p>
                 Jesus challenged his disciples to confess their faith before others
-                and to walk before others as his disciples (Matthew 10: 32-3; 16: 13-17, 24).
+                and to walk before others as his disciples.
             </p>
             <p>
-                Baptism presents an opportunity for new believers publicly display that Jesus is Lord and Savior.
+                "So everyone who acknowledges me before men,
+                I also will acknowledge before my Father who is in heaven,
+                but whoever denies me before men,
+                I also will deny before my Father who is in heaven." -Matthew 10 : 32-33
+            </p>
+            <p>
+                "We were buried therefore with him by baptism into death, in order that,
+                just as Christ was raised from the dead by the glory of the Father,
+                we too might walk in newness of life." -Romans 6 : 4
+            </p>
+            <p>
+                "Baptism, which corresponds to this, now saves you,
+                not as a removal of dirt from the body but as an appeal to God for a good conscience,
+                through the resurrection of Jesus Christ." -1 Peter 3 : 21
+            </p>
+            <p>
+                Baptism presents an opportunity for all believers to publicly
+                display that Jesus is their Lord and Savior.
             </p>
         </div>
     </div>

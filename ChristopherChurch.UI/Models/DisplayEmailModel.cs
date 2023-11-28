@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ChristopherChurch.UI.Models
 {
-    public class EmailModel
+    public class DisplayEmailModel
     {
         [Required(ErrorMessage = "Full Name is Required.")]
         [StringLength(50, ErrorMessage = "Full Name is too long.")]

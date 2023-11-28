@@ -9,6 +9,7 @@ using ChristopherChurch.UI.Models;
 using ChristopherChurch.UI.Pages;
 using System.Configuration;
 using ChristopherChurch.Data.Services;
+using ChristopherChurch.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +20,9 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddTransient<IPersonData, PersonData>();
 builder.Services.AddTransient<IEmailService, EmailService>();
-
-
+//builder.Services.AddTransient<IEventModelService, EventModelService>();
+builder.Services.AddTransient<INpgsqlDataAccess, NpgsqlDataAccess>();
+builder.Services.AddScoped<IEventModelService, EventModelService>();
 //builder.Services.AddStripe(Configuration.GetSection("Stripe"));
 
 var app = builder.Build();

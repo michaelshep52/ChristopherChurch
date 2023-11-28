@@ -68,8 +68,6 @@ a, .btn-link {
     }
 .servicebox {
     padding: 1rem;
-    color: white;
-    background: navy;
 }
 .baptism-gal {
     position: relative;
@@ -77,3 +75,4 @@ a, .btn-link {
     color: white;
     background: black;
 }
+

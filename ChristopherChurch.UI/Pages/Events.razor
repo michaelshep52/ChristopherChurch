@@ -1,0 +1,156 @@
+﻿@page "/Events"
+@inject IEventModelService EventService
+
+<h3 class="text-center">Upcoming Events</h3>
+
+@if (!showCreateForm)
+{
+    @if (events.Any())
+    {
+        <div class="card-deck">
+            @foreach (var eventModel in events)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">@eventModel.EventName</h5>
+                        <p class="card-text">@eventModel.Description</p>
+                        <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
+                        <button class="btn btn-primary" @onclick="() => EditEvent(eventModel)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteEvent(eventModel.EventId)">Delete</button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No events available.</p>
+    }
+    <button class="btn btn-success" @onclick="ToggleCreateForm">Create New Event</button>
+}
+
+@if (showCreateForm)
+{
+    <div>
+        @if (showSuccess)
+        {
+            <div class="alert alert-success" role="alert">
+                Event created successfully!
+            </div>
+        }
+        else
+        {
+            <h3>Create New Event</h3>
+
+            <EditForm Model="@eventModel" OnValidSubmit="@CreateEvent">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="form-group">
+                    <label for="eventName">Event Name:</label>
+                    <InputText id="eventName" @bind-Value="eventModel.EventName" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <InputTextArea id="description" @bind-Value="eventModel.Description" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDate">Event Date:</label>
+                    <InputDate id="eventDate" @bind-Value="eventModel.EventDate" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Event</button>
+            </EditForm>
+        }
+    </div>
+}
+
+@code {
+    List<EventModel> events = new List<EventModel>();
+    EventModel eventModel = new EventModel();
+    private bool showCreateForm = false;
+    private bool showSuccess = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEvents();
+    }
+
+    private async Task LoadEvents()
+    {
+        events = (await EventService.GetAllEventsAsync()).ToList();
+    }
+
+    private void EditEvent(EventModel selectedEvent)
+    {
+        eventModel = new EventModel
+        {
+            EventId = selectedEvent.EventId,
+            EventName = selectedEvent.EventName,
+            Description = selectedEvent.Description,
+            EventDate = selectedEvent.EventDate
+        };
+    }
+
+    private async Task SaveEvent()
+    {
+        if (eventModel.EventId == 0)
+        {
+            // Add new event
+            await EventService.AddEventAsync(eventModel);
+        }
+        else
+        {
+            // Update existing event
+            await EventService.UpdateEventAsync(eventModel);
+        }
+
+        // Refresh the events list
+        await LoadEvents();
+
+        // Clear the form for the next event
+        eventModel = new EventModel();
+    }
+
+    private async void DeleteEvent(int eventId)
+    {
+        if (await EventService.DeleteEventAsync(eventId) > 0)
+        {
+            // Refresh the events list
+            await LoadEvents();
+        }
+    }
+
+    private void ToggleCreateForm()
+    {
+        // Toggle the visibility of the event creation form
+        showCreateForm = !showCreateForm;
+        showSuccess = false;
+
+        // Reset the form when hiding it
+        if (!showCreateForm)
+        {
+            eventModel = new EventModel();
+        }
+    }
+
+    private async Task CreateEvent()
+    {
+        // Add the new event
+        await EventService.AddEventAsync(eventModel);
+
+        // Refresh the events list
+        await LoadEvents();
+
+        // Clear the form for the next event
+        eventModel = new EventModel();
+
+        showSuccess = true;
+
+        await Task.Delay(3000); // Delay for 3 seconds
+        ToggleCreateForm();
+    }
+}
