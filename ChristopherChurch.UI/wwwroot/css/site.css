@@ -128,10 +128,27 @@ html, body {
     flex-direction: column;
     margin:0;
 }
+.iframe-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    margin-bottom:-40px;
+}
 
-.servicevideo {
-    padding: 1rem;
-    background-color: #000000;
+iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none; 
+}
+
+.fluid-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 .servicebox, .eventpage {
     background-color: #f8f9fa;
