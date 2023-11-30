@@ -4,28 +4,6 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-h1:focus {
-    outline: none;
-}
-
-a, .btn-link {
-    color: #0071c1;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-.content {
-    padding-top: 1.1rem;
-}
-
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }
@@ -66,13 +44,139 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
-.servicebox {
+.navbar {
+    background-color: #000;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-brand.mx-auto {
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+.logo-img {
+    max-width: 20%;
+    height: auto;
+}
+
+.navbar-toggler {
+    padding: 10px;
+}
+
+.collapse {
+    /* Never collapse the sidebar for wide screens */
+    display: block;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+}
+
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.1rem;
+}
+
+.oi {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    top: -2px;
+}
+
+.nav-item {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+}
+
+    .nav-item:first-of-type {
+        padding-top: 1rem;
+    }
+
+    .nav-item:last-of-type {
+        padding-bottom: 1rem;
+    }
+
+    .nav-item ::deep a {
+        color: #d7d7d7;
+        border-radius: 4px;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        line-height: 3rem;
+    }
+
+        .nav-item ::deep a.active {
+            background-color: rgba(255,255,255,0.25);
+            color: white;
+        }
+
+        .nav-item ::deep a:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+.mainlayout {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin:0;
+}
+
+.servicevideo {
     padding: 1rem;
+    background-color: #000000;
+}
+.servicebox, .eventpage {
+    background-color: #f8f9fa;
+    border: 2px solid #D6D4D4;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    padding: 1.5rem;
+    margin:.5rem;
+    text-align: center;
+}
+    .servicebox ul {
+        list-style-type: none;
+    }
+.combo {
+    background-color: #D2D2D2;
 }
 .baptism-gal {
     position: relative;
     width: 100%;
     color: white;
     background: black;
+    padding:1rem;
+}
+.prayform {
+    padding-top:1rem;
+    background-color: #D2D2D2;
+}
+.socialpage {
+    background-color: #000000;
+    color:#ffff;
+    text-align: center;
+    padding: 2rem;
+
+}
+.socialmedia {
+    height: 60px;
+    padding-right: 20px;
+}
+    .socialmedia:hover, .socialmedia2:hover {
+        opacity: 0.7; /* Adjust the opacity as needed */
+        transform: scale(1.1); /* Adjust the scale factor for zoom effect */
+        transition: opacity 0.3s ease, transform 0.3s ease; /* Transition properties */
+    }
+.socialmedia2 {
+    max-height: 80px;
+    padding-right: 20px;
 }
 

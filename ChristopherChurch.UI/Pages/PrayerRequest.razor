@@ -1,48 +1,49 @@
-﻿@page "/PrayerRequest"
-@inject IEmailService EmailService
+﻿@inject IEmailService EmailService
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 <!--TODO!! Speed it up-->
-<div class="container-fluid p-2">
-    <div class="row">
-        <div class="col col-12 text-center">
-            <h3>Prayer Request</h3>
-        </div>
-        <div class="col col-12">
-            @if (isSubmitted)
-            {
-                <div class="col col-12 text-center">
-                    <h5>Thanks for your prayer request!</h5>
-                </div>
-            }
-            else
-            {
-                <div class="container-fluid py-3">
-                    <div class="row">
-                        <div class="col col-12 text-center">
-                            <p>We would love to pray for you. Please fill out this form below to inform the Church of your needs.</p>
-                        </div>
-                        <div>
-                            <EditForm Model="@emailModel" OnValidSubmit="SubmitForm">
-                                <DataAnnotationsValidator />
-                                <div class="form-group pb-2">
-                                    <label for="name">Your Name:</label>
-                                    <InputText type="text" id="name" @bind-Value="emailModel.Name" class="form-control" placeholder="ex. Jane Doe" />
-                                    <ValidationMessage For="@(() => emailModel.Name)" />
-                                </div>
-                                <div class="form-group pb-2">
-                                    <label for="request">Prayer Request:</label>
-                                    <InputTextArea id="request" @bind-Value="emailModel.Request" class="form-control" placeholder="ex. Pray for me."></InputTextArea>
-                                    <ValidationMessage For="@(() => emailModel.Request)" />
+<div class="prayform">
+    <div class="container-fluid p-2">
+        <div class="row">
+            <div class="col col-12 text-center">
+                <h3>Prayer Request</h3>
+            </div>
+            <div class="col col-12">
+                @if (isSubmitted)
+                {
+                    <div class="col col-12 text-center">
+                        <h5>Thanks for your prayer request!</h5>
+                    </div>
+                }
+                else
+                {
+                    <div class="container-fluid py-3">
+                        <div class="row">
+                            <div class="col col-12 text-center">
+                                <p>We would love to pray for you. Please fill out this form below to inform the Church of your needs.</p>
+                            </div>
+                            <div>
+                                <EditForm Model="@emailModel" OnValidSubmit="SubmitForm">
+                                    <DataAnnotationsValidator />
+                                    <div class="form-group pb-2">
+                                        <label for="name">Your Name:</label>
+                                        <InputText type="text" id="name" @bind-Value="emailModel.Name" class="form-control" placeholder="ex. Jane Doe" />
+                                        <ValidationMessage For="@(() => emailModel.Name)" />
+                                    </div>
+                                    <div class="form-group pb-2">
+                                        <label for="request">Prayer Request:</label>
+                                        <InputTextArea id="request" @bind-Value="emailModel.Request" class="form-control" placeholder="ex. Pray for me."></InputTextArea>
+                                        <ValidationMessage For="@(() => emailModel.Request)" />
 
-                                </div>
-                                <button type="submit" class="btn btn-outline-primary ">Submit Prayer</button>
-                                <span style="font-weight:bold; font-size:28px; color:#c00;">@Message</span>
-                            </EditForm>
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-primary" @onclick="Submitted">Submit Prayer</button>
+                                    <span style="font-weight:bold; font-size:28px; color:#c00;">@Message</span>
+                                </EditForm>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         </div>
     </div>
 </div>
@@ -52,7 +53,7 @@
     private EmailModel emailModel = new EmailModel();
     private string name = "";
     private string request ="";
-    private bool isSubmitted;
+    private bool isSubmitted = false;
 
     private string Message { get; set; } = "";
 
@@ -61,14 +62,18 @@
         try
         {
             await EmailService.SendPrayerRequestAsync(emailModel.Name, emailModel.Request);
-            isSubmitted = true;
-
         }
         catch (Exception ex)
         {
             Message = ex.Message;
 
         }
+    }
+
+    private async Task Submitted()
+    {
+         isSubmitted = true;
+        await Task.Delay(3000); // Delay for 3 seconds
     }
 }
 

@@ -1,0 +1,46 @@
+﻿<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <div class="row w-100">
+            <!-- Toggle button column on the left -->
+            <div class="col-1">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <button class="navbar-toggler" @onclick="ToggleMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="col-10 text-center">
+                <a class="navbar-brand mx-auto" href="#">
+                    <img src="https://raw.githubusercontent.com/michaelshep52/CCOGPictures/main/DarkLogo.jpg" alt="Logo" class="logo-img">
+                </a>
+            </div>
+
+
+                <!--Dropdown menu-->
+            <div class="collapse navbar-collapse" @onclick="ToggleMenu">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                            <span class="oi oi-home" aria-hidden="true"></span> Home
+                        </NavLink>
+                        <NavLink class="nav-link" href="Events">
+                            <span class="oi oi-events" aria-hidden="true"></span> Events
+                        </NavLink>
+                        <NavLink class="nav-link" href="Person">
+                            <span class="oi oi-people" aria-hidden="true"></span> Person
+                        </NavLink>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+@code {
+    private bool isMenuOpen = false;
+
+    private void ToggleMenu()
+    {
+        isMenuOpen = !isMenuOpen;
+    }
+}
