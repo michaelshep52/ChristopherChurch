@@ -1,0 +1,254 @@
+﻿@page "/MinistryForm"
+<!--Inject IEmailService-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 p-3">
+            <h1 class="text-center">Ministry Application Form</h1>
+            <hr />
+        </div>
+    </div>
+</div>
+
+<EditForm Model="@ministryApplication" OnValidSubmit="@SubmitForm">
+    <div class="form-row p-3">
+        <form>
+            <div class="form-row">
+                <div class="form-group col-8 p-2">
+                    <label for="inputFirstName">First Name</label>
+                    <input type="text" class="form-control" placeholder="Jane">
+                </div>
+                <div class="form-group col-8 p-2">
+                    <label for="inputLastName">Last Name</label>
+                    <input type="text" class="form-control" placeholder="Doe">
+                </div>
+                <div class="form-group col-8 p-2">
+                    <label for="inputEmail4">Email</label>
+                    <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+                </div>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputAddress">Address</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputAddress2">Address 2</label>
+                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-8 p-2">
+                    <label for="inputCity">City</label>
+                    <input type="text" class="form-control" id="inputCity" placeholder="Jeff">
+                </div>
+                <div class="form-group col-8 p-2">
+                    <label for="inputState">State</label>
+                    <select id="inputState" class="form-control">
+                        <option selected>Choose...</option>
+                        <option>AK</option>
+                        <option>AZ</option>
+                        <option>AR</option>
+                        <option>CA</option>
+                        <option>CO</option>
+                        <option>CT</option>
+                        <option>DE</option>
+                        <option>FL</option>
+                        <option>GA</option>
+                        <option>HI</option>
+                        <option>ID</option>
+                        <option>IL</option>
+                        <option>IN</option>
+                        <option>IA</option>
+                        <option>KS</option>
+                        <option>KY</option>
+                        <option>LA</option>
+                        <option>ME</option>
+                        <option>MD</option>
+                        <option>MA</option>
+                        <option>MI</option>
+                        <option>MN</option>
+                        <option>MS</option>
+                        <option>MO</option>
+                        <option>MT</option>
+                        <option>NE</option>
+                        <option>NV</option>
+                        <option>NH</option>
+                        <option>NJ</option>
+                        <option>NM</option>
+                        <option>NY</option>
+                        <option>NC</option>
+                        <option>ND</option>
+                        <option>OH</option>
+                        <option>OR</option>
+                        <option>PA</option>
+                        <option>RI</option>
+                        <option>SC</option>
+                        <option>SD</option>
+                        <option>TN</option>
+                        <option>TX</option>
+                        <option>UT</option>
+                        <option>VT</option>
+                        <option>VA</option>
+                        <option>WV</option>
+                        <option>WI</option>
+                        <option>WY</option>
+                    </select>
+                </div>
+                <div class="form-group col-8 p-2">
+                    <label for="inputZip">Zip</label>
+                    <input type="text" class="form-control" id="inputZip" placeholder="41701">
+                </div>
+            </div>
+            <div class="col-12 p-3">
+                <h3 class="text-center">Ministry Information</h3>
+            </div>
+            <div class="col-12">
+                <h5 class="text-center">Fill out only what you intend to be involved with.</h5>
+            </div>
+            <div class="form-group col-8">
+                <label for="inputMinistry">Choose a Ministry Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Teacher</option>
+                    <option>Custodian</option>
+                    <option>Cook</option>
+                    <option>Worship</option>
+                    <option>Greeter</option>
+                    <option>Lawn Care</option>
+                    <option>Parking Lot Care</option>
+                    <option>Technical</option>
+                    <option>Outreach</option>
+                    <option>Care</option>
+                </select>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputMinistry">Teaching Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Adult Sunday School</option>
+                    <option>Teen Sunday School</option>
+                    <option>Children Sunday School</option>
+                    <option>Adult Wednesday</option>
+                    <option>Teen Wednesday </option>
+                    <option>Children Wednesday</option>
+                </select>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputMinistry">Custodian Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Bathroom</option>
+                    <option>Sanctuary</option>
+                    <option>Fellowship Hall</option>
+                    <option>Window</option>
+                </select>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputMinistry">Cooking Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Sunday School</option>
+                    <option>Wednesday Night</option>
+                    <option>Care</option>
+                </select>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputMinistry">Worship Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Guitar Player</option>
+                    <option>Bass Player</option>
+                    <option>Drum Player</option>
+                    <option>KeyBoard Player</option>
+                    <option>Vocalist</option>
+                </select>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputMinistry">Greeter Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Front Door</option>
+                    <option>Parking Lot</option>
+                </select>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputMinistry">Lawn Care Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Weedeater</option>
+                    <option>Trimmer</option>
+                    <option>Landscaper</option>
+                </select>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputMinistry">Parking Lot Care Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Trash Pickup</option>
+                    <option>Parking</option>
+                </select>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputMinistry">Technical Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Computer</option>
+                    <option>Sound Board</option>
+                </select>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputMinistry">Outreach Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Broshears</option>
+                    <option>Marketing</option>
+                    <option>Communitcation</option>
+                </select>
+            </div>
+            <div class="form-group col-8 p-2">
+                <label for="inputMinistry">Care Team</label>
+                <select id="inputMinistry" class="form-control">
+                    <option selected>Choose...</option>
+                    <option>Calling</option>
+                    <option>Communication(Messaging)</option>
+                    <option>Hospital Visits</option>
+                    <option>Home Visits</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+                        Authorization for background check
+                    </label>
+                    <div class="invalid-feedback">
+                        You must agree before submitting.
+                    </div>
+                </div>
+            </div>
+            <br />
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</EditForm>
+
+@code {
+    private MinistryApplicationModel ministryApplication = new MinistryApplicationModel();
+
+    private async Task SubmitForm()
+    {
+        // You can implement logic to send the email using your email service
+        // For simplicity, let's assume you have an IEmailService with a SendEmail method
+        //await EmailService.SendEmail(ministryApplication);
+        
+        // You can redirect to a confirmation page or perform other actions after submission
+    }
+
+    public class MinistryApplicationModel
+    {
+        // Define properties for your form fields
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        // ... (Other properties)
+
+        public bool Authorization { get; set; }
+    }
+}
