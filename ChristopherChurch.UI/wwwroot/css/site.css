@@ -44,11 +44,25 @@ html, body {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
-.navbar {
+    .navbar {
     background-color: #000;
     position: sticky;
     top: 0;
     z-index: 1000;
+}
+
+.toggle-box {
+    padding-left: 1rem;
+    margin-left: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-toggler {
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 .navbar-brand.mx-auto {
@@ -62,21 +76,12 @@ html, body {
     height: auto;
 }
 
-.navbar-toggler {
-    padding: 10px;
-}
-
 .collapse {
-    /* Never collapse the sidebar for wide screens */
     display: block;
 }
 
 .navbar-dark .navbar-nav .nav-link {
     color: #fff;
-}
-
-.navbar-toggler {
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .navbar-brand {
@@ -93,6 +98,7 @@ html, body {
 .nav-item {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
+    padding-left: 2rem;
 }
 
     .nav-item:first-of-type {
@@ -126,7 +132,7 @@ html, body {
     position: relative;
     display: flex;
     flex-direction: column;
-    margin:0;
+    margin: 0;
 }
 .iframe-container {
     position: relative;
@@ -188,9 +194,9 @@ iframe {
     padding-right: 20px;
 }
     .socialmedia:hover, .socialmedia2:hover {
-        opacity: 0.7; /* Adjust the opacity as needed */
-        transform: scale(1.1); /* Adjust the scale factor for zoom effect */
-        transition: opacity 0.3s ease, transform 0.3s ease; /* Transition properties */
+        opacity: 0.7; 
+        transform: scale(1.1); 
+        transition: opacity 0.3s ease, transform 0.3s ease;
     }
 .socialmedia2 {
     max-height: 80px;
