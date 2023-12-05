@@ -82,6 +82,7 @@ html, body {
 
 .navbar-dark .navbar-nav .nav-link {
     color: #fff;
+    font-weight: bold;
 }
 
 .navbar-brand {
@@ -101,32 +102,20 @@ html, body {
     padding-left: 2rem;
 }
 
-    .nav-item:first-of-type {
-        padding-top: 1rem;
+.nav-item:first-of-type {
+    padding-top: 1rem;
+}
+
+.nav-item:last-of-type {
+    padding-bottom: 1rem;
+}
+
+    .nav-item:hover {
+        background: linear-gradient(to right, #000000, #808080); /* Adjust colors as needed */
+        color: #ffffff;
+        border: 3px solid white;
+        border-radius: 25px;
     }
-
-    .nav-item:last-of-type {
-        padding-bottom: 1rem;
-    }
-
-    .nav-item ::deep a {
-        color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
-    }
-
-        .nav-item ::deep a.active {
-            background-color: rgba(255,255,255,0.25);
-            color: white;
-        }
-
-        .nav-item ::deep a:hover {
-            background-color: rgba(255,255,255,0.1);
-            color: white;
-        }
 
 .mainlayout {
     position: relative;
@@ -138,7 +127,7 @@ html, body {
     position: relative;
     width: 100%;
     padding-top: 56.25%;
-    margin-bottom:-40px;
+    margin-bottom:-3px;
 }
 
 iframe {
@@ -149,6 +138,25 @@ iframe {
     height: 100%;
     border: none; 
 }
+.transparent-button {
+    position: absolute;
+    bottom: 40px; 
+    left: 13px;
+    background: transparent;
+    color: #1589F9; 
+    font-size: 15px;
+    padding: 5px 10px;
+    border: 2px solid #1589F9;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .transparent-button:hover {
+        background-color: #1589F9;
+        color: #FFFFFF
+    }
 
 .fluid-image {
     max-width: 100%;
