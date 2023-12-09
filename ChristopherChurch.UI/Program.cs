@@ -19,6 +19,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddTransient<IPersonData, PersonData>();
+builder.Services.AddTransient<IEventsData, EventsData>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 //builder.Services.AddTransient<IEventModelService, EventModelService>();
 builder.Services.AddTransient<INpgsqlDataAccess, NpgsqlDataAccess>();

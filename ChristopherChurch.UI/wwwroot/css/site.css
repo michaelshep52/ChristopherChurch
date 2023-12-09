@@ -111,7 +111,7 @@ html, body {
 }
 
     .nav-item:hover {
-        background: linear-gradient(to right, #000000, #808080); /* Adjust colors as needed */
+        background: linear-gradient(to right, #000000, #808080); 
         color: #ffffff;
         border: 3px solid white;
         border-radius: 25px;

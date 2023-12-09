@@ -1,6 +1,7 @@
 ﻿using System;
 using ChristopherChurch.Data.DbAccess;
 using ChristopherChurch.Data.Models;
+using Dapper;
 
 namespace ChristopherChurch.Data.DataAccess
 {
@@ -13,39 +14,18 @@ namespace ChristopherChurch.Data.DataAccess
             _db = db;
         }
 
-        public Task<List<PersonModel>> GetPeople()
+        public async Task<List<PersonModel>> GetPeople()
         {
             string sql = "select * from persons";
-            return _db.LoadData<PersonModel, dynamic>(sql, new { });
+            return await _db.LoadData<PersonModel, dynamic>(sql, new { });
         }
 
-        public Task InsertPerson( PersonModel person)
+        public async Task InsertPerson( PersonModel person)
         {
             string sql = @"insert into persons (person_id, first_name, last_name, gender, email_address)
                                     values (@person_id, @first_name, @last_name, @gender, @email_address);";
-            return _db.SaveData(sql, person);
+            await _db.SaveData(sql, person);
         }
-        /*  public Task<IEnumerable<PersonModel>> GetPersons() =>
-              _db.LoadData<PersonModel, dynamic>(storedProcedure: "persons_GetAll", new { });
-
-          public async Task<PersonModel?> GetPerson(int id)
-          {
-              var results = await _db.LoadData<PersonModel, dynamic>(
-                  storedProcedure: "persons_Get",
-                  new { Id = id });
-              return results.FirstOrDefault();
-          }
-          public Task InsertPerson(PersonModel person) =>
-              _db.SaveData(storedProcedure: "persons_Insert",
-                  new { person.FirstName, person.LastName, person.Gender, person.DateofBirth });
-
-          public Task UpdatePerson(PersonModel person) =>
-              _db.SaveData(storedProcedure: "persons_Update", person);
-
-          public Task DeletePerson(int id) =>
-              _db.SaveData(storedProcedure: "persons_Delete", new { Id = id });
-        */
-
     }
 }
 

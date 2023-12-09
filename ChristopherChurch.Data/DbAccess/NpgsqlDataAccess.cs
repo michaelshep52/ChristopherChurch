@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -24,15 +25,20 @@ namespace ChristopherChurch.Data.DbAccess
 
         //  public IDbConnection Connection => new NpgsqlConnection(_connectionString);
 
-        public async Task<IEnumerable<T>> GetAllAsync<T, U>(string sql, T parameters)
+        /* public async Task<IEnumerable<T>> GetAllAsync<T, U>(string sql, T parameters)
+         {
+             string connectionString = _config.GetConnectionString(ConnectionStringName);
+             using (IDbConnection connection = new NpgsqlConnection(connectionString))
+             {
+                 var data = await connection.QueryAsync<T>(sql, parameters);
+                 return data.ToList();
+             }
+         }*/
+        /*public async Task<IEnumerable<T>> GetAllAsync<T>()
         {
-            string connectionString = _config.GetConnectionString(ConnectionStringName);
-            using (IDbConnection connection = new NpgsqlConnection(connectionString))
-            {
-                var data = await connection.QueryAsync<T>(sql, parameters);
-                return data.ToList();
-            }
-        }
+            var entities = await _config.QueryAsync<T>("SELECT * FROM " + typeof(T).Name);
+            return entities.ToList();
+        }*/
 
         public async Task<IEnumerable<T>> GetAllAsync<T>(string tableName)
         {
@@ -58,23 +64,36 @@ namespace ChristopherChurch.Data.DbAccess
 
         public async Task<int> InsertAsync<T>(string tableName, T entity)
         {
-            string connectionString = _config.GetConnectionString(ConnectionStringName);
-            using (IDbConnection connection = new NpgsqlConnection(connectionString))
+            try
             {
-                var query = $"INSERT INTO {tableName} VALUES (@{string.Join(", @", GetPropertyNames(entity))})";
-                return await connection.ExecuteAsync(query, entity);
+                string connectionString = _config.GetConnectionString(ConnectionStringName);
+
+                using (IDbConnection connection = new NpgsqlConnection(connectionString))
+                {
+                    // Use Dapper's built-in parameterization to avoid SQL injection
+                    var query = $"INSERT INTO {tableName} VALUES @{GetParamNames(entity)}";
+
+                    // ExecuteAsync takes an anonymous type or a dictionary as parameters
+                    return await connection.ExecuteAsync(query, entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions or log them appropriately
+                Console.WriteLine($"Error in InsertAsync: {ex.Message}");
+                throw;
             }
         }
 
-        public async Task<int> UpdateAsync<T>(string tableName, T entity)
-        {
-            string connectionString = _config.GetConnectionString(ConnectionStringName);
-            using (IDbConnection connection = new NpgsqlConnection(connectionString))
-            {
-                var query = $"UPDATE {tableName} SET {UpdateQuery(entity)} WHERE Id = @Id";
-                return await connection.ExecuteAsync(query, entity);
-            }
-        }
+         public async Task<int> UpdateAsync<T>(string tableName, T entity)
+         {
+             string connectionString = _config.GetConnectionString(ConnectionStringName);
+             using (IDbConnection connection = new NpgsqlConnection(connectionString))
+             {
+                 var query = $"UPDATE {tableName} SET {UpdateQuery(entity)} WHERE Id = @Id";
+                 return await connection.ExecuteAsync(query, entity);
+             }
+         }
 
         public async Task<int> DeleteAsync(string tableName, int id)
         {
@@ -85,7 +104,12 @@ namespace ChristopherChurch.Data.DbAccess
                 return await connection.ExecuteAsync(query, new { Id = id });
             }
         }
+        private string GetParamNames<T>(T entity)
+        {
+            var propertyNames = GetPropertyNames(entity);
 
+            return string.Join(",@", propertyNames);
+        }
         private IEnumerable<string> GetPropertyNames(object entity)
         {
             return entity.GetType().GetProperties().Select(property => property.Name);

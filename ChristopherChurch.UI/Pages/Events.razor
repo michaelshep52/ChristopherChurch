@@ -1,5 +1,7 @@
 ﻿@page "/Events"
-@inject IEventModelService EventService
+
+@inject IEventsData _db
+
 <div class="eventpage">
     <h2 class="text-center">Upcoming Events</h2>
 
@@ -42,23 +44,23 @@
             {
                 <h3>Create New Event</h3>
 
-                <EditForm Model="@eventModel" OnValidSubmit="@CreateEvent">
+                <EditForm Model="@newEvent" OnValidSubmit="@CreateEvent">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
 
                     <div class="form-group">
                         <label for="eventName">Event Name:</label>
-                        <InputText id="eventName" @bind-Value="eventModel.EventName" class="form-control" />
+                        <InputText id="eventName" @bind-Value="newEvent.EventName" class="form-control" />
                     </div>
 
                     <div class="form-group">
                         <label for="description">Description:</label>
-                        <InputTextArea id="description" @bind-Value="eventModel.Description" class="form-control" />
+                        <InputTextArea id="description" @bind-Value="newEvent.Description" class="form-control" />
                     </div>
 
                     <div class="form-group">
                         <label for="eventDate">Event Date:</label>
-                        <InputDate id="eventDate" @bind-Value="eventModel.EventDate" class="form-control" />
+                        <InputDate id="eventDate" @bind-Value="newEvent.EventDate" class="form-control" />
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save Event</button>
@@ -75,8 +77,8 @@
 @code {
     [Inject] private NavigationManager NavigationManager { get; set; }
 
-    List<EventModel> events = new List<EventModel>();
-    EventModel eventModel = new EventModel();
+    private List<EventModel>? events;
+    private DisplayEventModel newEvent = new DisplayEventModel();
     private bool showCreateForm = false;
     private bool showSuccess = false;
     private bool IsOnEventsPage => NavigationManager.Uri.Contains("/events");
@@ -89,12 +91,14 @@
 
     private async Task LoadEvents()
     {
-        events = (await EventService.GetAllEventsAsync()).ToList();
+        events = await _db.GetAllEvents();
     }
 
-    private void EditEvent(EventModel selectedEvent)
+    private async void EditEvent(EventModel selectedEvent)
     {
-        eventModel = new EventModel
+        await EventsData.UpdateEvent(selectedEvent);
+
+        events = new EventModel
         {
             EventId = selectedEvent.EventId,
             EventName = selectedEvent.EventName,
@@ -108,12 +112,12 @@
         if (eventModel.EventId == 0)
         {
             // Add new event
-            await EventService.AddEventAsync(eventModel);
+            await EventsData.AddEvent(eventModel);
         }
         else
         {
             // Update existing event
-            await EventService.UpdateEventAsync(eventModel);
+            await EventsData.UpdateEvent(eventModel);
         }
 
         // Refresh the events list
@@ -125,7 +129,7 @@
 
     private async void DeleteEvent(int eventId)
     {
-        if (await EventService.DeleteEventAsync(eventId) > 0)
+        if (await EventsData.DeleteEvent(eventId) > 0)
         {
             // Refresh the events list
             await LoadEvents();
@@ -148,13 +152,14 @@
     private async Task CreateEvent()
     {
         // Add the new event
-        await EventService.AddEventAsync(eventModel);
+        await EventsData.AddEvent(newEvent);
+
 
         // Refresh the events list
         await LoadEvents();
 
         // Clear the form for the next event
-        eventModel = new EventModel();
+        newEvent = new EventModel();
 
         showSuccess = true;
 
@@ -165,5 +170,20 @@
     {
         // Navigate to the events page
         NavigationManager.NavigateTo("/events");
+    }
+
+    private async Task AddEvent()
+    {
+        EventModel e = new EventModel
+        {
+            EventId = newEvent.EventId,
+            EventName = newEvent.EventName,
+            Description = newEvent.Description,
+            EventDate = newEvent.EventDate
+        };
+        await _db.AddEvent(e);
+        events.Add(e);
+
+        newEvent = new DisplayEventModel();
     }
 }

@@ -1,0 +1,73 @@
+﻿@page "/EventsPage"
+
+@inject IEventsData _db
+
+<h1>Event Page</h1>
+
+<h4>Insert New Event</h4>
+<EditForm Model="@newEvent" OnValidSubmit="@InsertEvent">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+    <InputText id="eventName" @bind-Value="newEvent.EventName"></InputText>
+    <InputText id="description" @bind-Value="newEvent.Description"></InputText>
+    <InputDate id="eventDate" @bind-Value="newEvent.EventDate"></InputDate>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</EditForm>
+
+<h4>Current Events</h4>
+@if (events is null)
+{
+    <p><em>Loading. . .</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>EventId</th>
+                <th>Event Name</th>
+                <th>Description</th>
+                <th>Event Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in events)
+            {
+                <tr>
+                    <td>@e.EventId</td>
+                    <td>@e.EventName</td>
+                    <td>@e.Description</td>
+                    <td>@e.EventDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<EventModel>? events;
+    private DisplayEventModel newEvent = new DisplayEventModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+         await _db.GetAllEvents();
+    }
+
+    private async Task InsertEvent()
+    {
+        EventModel e = new EventModel
+        {
+            EventId = newEvent.EventId,
+            EventName = newEvent.EventName,
+            Description = newEvent.Description,
+            EventDate = newEvent.EventDate
+        };
+        await _db.AddEvent(e);
+        events.Add(e);
+
+        newEvent = new DisplayEventModel();
+    }
+
+
+}
