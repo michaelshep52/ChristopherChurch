@@ -10,40 +10,40 @@ namespace ChristopherChurch.Data.DataAccess
 {
     public class EventsData : IEventsData
     {
-        private readonly SqlDataAccess _db;
+        private readonly ISqlDataAccess _db;
 
-        public EventsData(SqlDataAccess db)
+        public EventsData(ISqlDataAccess db)
         {
             _db = db;
         }
-        public async Task<List<EventsData>> GetAllEvents()
+
+        public async Task<List<EventModel>> GetAllEvents()
         {
             string sql = "SELECT event_id, event_name, description, event_date FROM events";
-            return await _db.LoadData<EventsData, dynamic>(sql, new { });
+            return await _db.LoadData<EventModel, dynamic>(sql, new { });
         }
 
-        /* public async Task<EventsData> GetEventById(int eventId)
-         {
-             string sql = "SELECT event_id, event_name, description, event_date FROM events WHERE event_id = @EventId";
-             return await _db.LoadData<EventsData>(sql, eventId);
-         }
-        */
-        public async Task AddEvent(EventsData eventData)
+        public async Task<int> AddEvent(EventModel eventModel)
         {
-            string sql = "INSERT INTO events (event_id, event_name, description, event_date) VALUES (@EventId, @EventName, @Description, @EventDate)";
-            await _db.SaveData(sql, eventData);
+            string sql = @"INSERT INTO events (event_name, description, event_date) " +
+                         "VALUES (@EventName, @Description, @EventDate)";
+             await _db.SaveData(sql, eventModel);
+            return 0;
         }
 
-        public async Task UpdateEvent(EventsData eventData)
+        public async Task UpdateEvent(EventModel eventModel)
         {
-            string sql = "UPDATE events SET event_id = @EventId, event_name = @EventName, description = @Description, event_date = @EventDate WHERE event_id = @EventId";
-            await _db.SaveData(sql, eventData);
+            string sql = @"UPDATE events SET event_name = @EventName, description = @Description, event_date = @EventDate WHERE event_id = @EventId";
+            await _db.SaveData(sql, eventModel);
         }
 
         public async Task DeleteEvent(int eventId)
         {
-            string sql = "DELETE FROM events WHERE event_id = @EventId";
-            await _db.SaveData(sql, eventId);
+            Console.WriteLine($"Deleting event with ID: {eventId}");
+
+            string sql = @"DELETE FROM events WHERE event_id = @EventId";
+            await _db.SaveData(sql, new { EventId = eventId });
         }
     }
+
 }

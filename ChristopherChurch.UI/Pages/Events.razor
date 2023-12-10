@@ -1,36 +1,34 @@
 ﻿@page "/Events"
-
 @inject IEventsData _db
 
 <div class="eventpage">
     <h2 class="text-center">Upcoming Events</h2>
 
-    @if (!showCreateForm)
+    <!-- Display existing events -->
+    @if (events != null && events.Any())
     {
-        @if (events.Any())
-        {
-            <div class="card-deck">
-                @foreach (var eventModel in events)
-                {
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">@eventModel.EventName</h5>
-                            <p class="card-text">@eventModel.Description</p>
-                            <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
-                            <button class="btn btn-outline-primary rounded" @onclick="() => EditEvent(eventModel)">Edit</button>
-                            <button class="btn btn-outline-danger rounded" @onclick="() => DeleteEvent(eventModel.EventId)">Delete</button>
-                        </div>
+        <div class="card-deck">
+            @foreach (var eventModel in events)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">@eventModel.EventName</h5>
+                        <p class="card-text">@eventModel.Description</p>
+                        <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
+                        <button class="btn btn-outline-primary rounded" @onclick="() => EditEvent(eventModel)">Edit</button>
+                        <button class="btn btn-outline-danger rounded" @onclick="() => DeleteEvent(eventModel.EventId)">Delete</button>
+                        <p>Event Id: @eventModel.EventId</p>
                     </div>
-                }
-            </div>
-        }
-        else
-        {
-            <p>No events available.</p>
-        }
-        <button class="btn btn-outline-primary rounded me-3" @onclick="ToggleCreateForm">Create New Event</button>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No events available.</p>
     }
 
+    <!-- Display form to create a new event -->
     @if (showCreateForm)
     {
         <div>
@@ -68,6 +66,11 @@
             }
         </div>
     }
+
+    <!-- Toggle button to show/hide the create form -->
+    <button class="btn btn-outline-primary rounded me-3" @onclick="ToggleCreateForm">Create New Event</button>
+
+    <!-- View all events button -->
     @if (!IsOnEventsPage)
     {
         <button class="btn btn-outline-success rounded" @onclick="ViewAllEvents">View All Events</button>
@@ -75,14 +78,14 @@
 </div>
 
 @code {
-    [Inject] private NavigationManager NavigationManager { get; set; }
-
-    private List<EventModel>? events;
+    private List<EventModel> events;
     private DisplayEventModel newEvent = new DisplayEventModel();
+    private int nextEventId = 1;
     private bool showCreateForm = false;
     private bool showSuccess = false;
     private bool IsOnEventsPage => NavigationManager.Uri.Contains("/events");
 
+    [Inject] private NavigationManager NavigationManager { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,94 +99,65 @@
 
     private async void EditEvent(EventModel selectedEvent)
     {
-        await EventsData.UpdateEvent(selectedEvent);
-
-        events = new EventModel
-        {
-            EventId = selectedEvent.EventId,
-            EventName = selectedEvent.EventName,
-            Description = selectedEvent.Description,
-            EventDate = selectedEvent.EventDate
-        };
-    }
-
-    private async Task SaveEvent()
-    {
-        if (eventModel.EventId == 0)
-        {
-            // Add new event
-            await EventsData.AddEvent(eventModel);
-        }
-        else
-        {
-            // Update existing event
-            await EventsData.UpdateEvent(eventModel);
-        }
-
-        // Refresh the events list
-        await LoadEvents();
-
-        // Clear the form for the next event
-        eventModel = new EventModel();
+        // Perform edit logic
+        // You might want to navigate to another page or show a modal for editing
+        // Example: NavigationManager.NavigateTo($"/editEvent/{selectedEvent.EventId}");
     }
 
     private async void DeleteEvent(int eventId)
     {
-        if (await EventsData.DeleteEvent(eventId) > 0)
+        try
         {
-            // Refresh the events list
+            await _db.DeleteEvent(eventId);
             await LoadEvents();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting event: {ex.Message}");
         }
     }
 
     private void ToggleCreateForm()
     {
-        // Toggle the visibility of the event creation form
         showCreateForm = !showCreateForm;
         showSuccess = false;
 
-        // Reset the form when hiding it
         if (!showCreateForm)
         {
-            eventModel = new EventModel();
+            newEvent = new DisplayEventModel();
         }
     }
 
     private async Task CreateEvent()
     {
-        // Add the new event
-        await EventsData.AddEvent(newEvent);
+        try
+        {
+            EventModel e = new EventModel
+            {
+                EventId = nextEventId++,
+                EventName = newEvent.EventName,
+                Description = newEvent.Description,
+                EventDate = newEvent.EventDate
+            };
+            await _db.AddEvent(e);
+            events.Add(e);
 
+            newEvent = new DisplayEventModel();
 
-        // Refresh the events list
-        await LoadEvents();
+            showSuccess = true;
 
-        // Clear the form for the next event
-        newEvent = new EventModel();
+            await Task.Delay(3000);
+            ToggleCreateForm();
 
-        showSuccess = true;
-
-        await Task.Delay(3000); // Delay for 3 seconds
-        ToggleCreateForm();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting event: {ex.Message}");
+        }
     }
+
     private void ViewAllEvents()
     {
-        // Navigate to the events page
         NavigationManager.NavigateTo("/events");
-    }
-
-    private async Task AddEvent()
-    {
-        EventModel e = new EventModel
-        {
-            EventId = newEvent.EventId,
-            EventName = newEvent.EventName,
-            Description = newEvent.Description,
-            EventDate = newEvent.EventDate
-        };
-        await _db.AddEvent(e);
-        events.Add(e);
-
-        newEvent = new DisplayEventModel();
     }
 }

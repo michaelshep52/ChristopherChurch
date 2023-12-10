@@ -1,10 +1,12 @@
-﻿namespace ChristopherChurch.Data.DataAccess
+﻿using ChristopherChurch.Data.Models;
+
+namespace ChristopherChurch.Data.DataAccess
 {
     public interface IEventsData
     {
-        Task AddEvent(EventsData eventData);
+        Task<int> AddEvent(EventModel eventModel);
         Task DeleteEvent(int eventId);
-        Task<List<EventsData>> GetAllEvents();
-        Task UpdateEvent(EventsData eventData);
+        Task<List<EventModel>> GetAllEvents();
+        Task UpdateEvent(EventModel eventModel);
     }
 }

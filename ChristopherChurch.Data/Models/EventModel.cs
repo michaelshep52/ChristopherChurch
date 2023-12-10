@@ -9,7 +9,10 @@ namespace ChristopherChurch.Data.Models
         public  string EventName { get; set; } = "";
         public  string Description { get; set; } = "";
         public DateTime EventDate { get; set; }
-       
+
+        public EventModel()
+        {
+        }
     }
 }
 
