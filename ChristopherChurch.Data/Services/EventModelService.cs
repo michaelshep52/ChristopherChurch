@@ -27,7 +27,7 @@ namespace ChristopherChurch.Data.Services
             {
                // string sql = "select * from events";
                // return await _dataAccess.GetAllAsync<EventModel, dynamic>(sql, new EventModel { });
-               return await _dataAccess.GetAllAsync<EventModel>("events");
+               return await _dataAccess.LoadData<EventModel>("events");
 
             }
             catch (AggregateException ae)

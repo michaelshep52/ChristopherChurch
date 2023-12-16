@@ -10,6 +10,8 @@ using ChristopherChurch.UI.Pages;
 using System.Configuration;
 using ChristopherChurch.Data.Services;
 using ChristopherChurch.Data.Models;
+using Npgsql;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -19,75 +19,62 @@ namespace ChristopherChurch.Data.DbAccess
         public async Task<List<T>> LoadData<T, U>(string sql, U parameters)
         {
             string? connectionString = _config.GetConnectionString(ConnectionStringName);
-            using (IDbConnection connection = new NpgsqlConnection(connectionString))
-            {
-                var data = await connection.QueryAsync<T>(sql, parameters);
-                return data.ToList();
-            }
-        }
 
-        public async Task SaveData<T>(string sql, T parameters)
-        {
-            string? connectionString = _config.GetConnectionString(ConnectionStringName);
-            using (IDbConnection connection = new NpgsqlConnection(connectionString))
-            {
-                await connection.ExecuteAsync(sql, parameters);
-            }
-        }
-        /*
-        public async Task<T> GetEntityById<T>(string sql, int id)
-        {
-            string? connectionString = _config.GetConnectionString(ConnectionStringName);
-            using (IDbConnection connection = new NpgsqlConnection(connectionString))
-            {
-                return await connection.QueryFirstOrDefaultAsync<T>(sql, new { Id = id });
-            }
-        }
+            var dataSourceBuilder = new NpgsqlConnectionStringBuilder(connectionString);
+            var dataSource = new NpgsqlConnection(dataSourceBuilder.ConnectionString);
 
-        public async Task<int> InsertEntity<T>(string sql, T entity)
-        {
+            await dataSource.OpenAsync();
             try
             {
-                string? connectionString = _config.GetConnectionString(ConnectionStringName);
-
-                using (IDbConnection connection = new NpgsqlConnection(connectionString))
-                {
-                    // Use Dapper's built-in parameterization to avoid SQL injection
-                    var query = $"{sql} RETURNING id";
-
-                    // ExecuteAsync takes an anonymous type or a dictionary as parameters
-                    return await connection.ExecuteScalarAsync<int>(query, entity);
-                }
+                var data = await dataSource.QueryAsync<T>(sql, parameters, commandType: CommandType.Text);
+                return data.ToList();
             }
             catch (Exception ex)
             {
-                // Handle exceptions or log them appropriately
-                Console.WriteLine($"Error in InsertEntity: {ex.Message}");
+                Console.WriteLine($"Error executing query: {ex.Message}");
+                throw;
+            }
+
+        }
+
+        public async Task<T> LoadSingleData<T, U>(string sql, U parameters)
+        {
+            string? connectionString = _config.GetConnectionString(ConnectionStringName);
+
+            var dataSourceBuilder = new NpgsqlConnectionStringBuilder(connectionString);
+            var dataSource = new NpgsqlConnection(dataSourceBuilder.ConnectionString);
+
+            await dataSource.OpenAsync();
+            try
+            {
+                var data = await dataSource.QueryFirstOrDefaultAsync<T>(sql, parameters, commandType: CommandType.Text);
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error executing query: {ex.Message}");
                 throw;
             }
         }
 
-        public async Task<int> UpdateEntity<T>(string sql, T entity)
-        {
-            string? connectionString = _config.GetConnectionString(ConnectionStringName);
-            using (IDbConnection connection = new NpgsqlConnection(connectionString))
-            {
-                return await connection.ExecuteAsync(sql, entity);
-            }
-        }
 
-        public async Task<int> DeleteEntity(string sql, int id)
+        public async Task SaveData<T>(string sql, T parameters)
         {
             string? connectionString = _config.GetConnectionString(ConnectionStringName);
-            using (IDbConnection connection = new NpgsqlConnection(connectionString))
+
+            var dataSourceBuilder = new NpgsqlConnectionStringBuilder(connectionString);
+            var dataSource = new NpgsqlConnection(dataSourceBuilder.ConnectionString);
+
+            await dataSource.OpenAsync();
+            try
             {
-                return await connection.ExecuteAsync(sql, new { Id = id });
+                await dataSource.ExecuteAsync(sql, parameters);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error executing query: {ex.Message}");
+                throw;
             }
         }
-        */
     }
 }
-
-
-
-

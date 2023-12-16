@@ -40,15 +40,25 @@ namespace ChristopherChurch.Data.DbAccess
             return entities.ToList();
         }*/
 
-        public async Task<IEnumerable<T>> GetAllAsync<T>(string tableName)
+        public async Task<List<T>> LoadData<T>(string tableName)
         {
-            //using var connection = Connection;
-            //connection.Open();
-            string connectionString = _config.GetConnectionString(ConnectionStringName);
+            string sql = $"SELECT * FROM {tableName};";
+
+            string? connectionString = _config.GetConnectionString(ConnectionStringName);
             using (IDbConnection connection = new NpgsqlConnection(connectionString))
             {
-                var query = $"SELECT * FROM {tableName}";
-                return await connection.QueryAsync<T>(query);
+                try
+                {
+                    var data = await connection.QueryAsync<T>(sql);
+
+                    //var data = await connection.QueryAsync<T>(sql, parameters);
+                    return data.ToList();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error executing query: {ex.Message}");
+                    throw;
+                }
             }
         }
 
@@ -85,15 +95,15 @@ namespace ChristopherChurch.Data.DbAccess
             }
         }
 
-         public async Task<int> UpdateAsync<T>(string tableName, T entity)
-         {
-             string connectionString = _config.GetConnectionString(ConnectionStringName);
-             using (IDbConnection connection = new NpgsqlConnection(connectionString))
-             {
-                 var query = $"UPDATE {tableName} SET {UpdateQuery(entity)} WHERE Id = @Id";
-                 return await connection.ExecuteAsync(query, entity);
-             }
-         }
+        public async Task<int> UpdateAsync<T>(string tableName, T entity)
+        {
+            string connectionString = _config.GetConnectionString(ConnectionStringName);
+            using (IDbConnection connection = new NpgsqlConnection(connectionString))
+            {
+                var query = $"UPDATE {tableName} SET {UpdateQuery(entity)} WHERE Id = @Id";
+                return await connection.ExecuteAsync(query, entity);
+            }
+        }
 
         public async Task<int> DeleteAsync(string tableName, int id)
         {
