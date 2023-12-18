@@ -16,7 +16,6 @@ namespace ChristopherChurch.Data.DataAccess
         {
             _db = db;
         }
-        //TODO Fix recall to show corrected eventId
         public async Task<List<EventModel>> GetAllEvents()
         {
             //AS clause had to be used to properly retrieve all data from table with dapper.
@@ -30,7 +29,6 @@ namespace ChristopherChurch.Data.DataAccess
             {
                 string sql = "SELECT event_name AS EventName, description AS Description, event_date AS EventDate FROM events WHERE event_name = @EventName";
 
-                // Assuming _db is an instance of Dapper's IDbConnection
                 EventModel eventModel = await _db.LoadSingleData<EventModel, dynamic>(sql, new { EventName = eventName });
 
                 return eventModel;

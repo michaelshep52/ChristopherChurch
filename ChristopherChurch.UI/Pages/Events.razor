@@ -1,7 +1,9 @@
 ﻿@page "/Events"
 @inject IEventsData _db
-<!--TODO on home page only show one event at a time.-->
-<!--TODO Fix Card settings to look more professional-->
+
+<!--#TODO Create User Validation-->
+<!--#TODO Create Unique Event Name Validation-->
+
 @if (IsOnEventsPage)
 {
     <div class="eventpage">
@@ -9,162 +11,164 @@
 
         @if (events != null && events.Any())
         {
-            <div class="card-deck">
+            <div class="row">
                 @foreach (var eventModel in events)
                 {
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">@eventModel.EventName</h5>
-                            <p class="card-text">@eventModel.Description</p>
-                            <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button class="btn btn-outline-primary rounded" @onclick="ToggleCreateForm">Create New Event</button>
-                                        <button class="btn btn-outline-primary rounded" @onclick="() => EditEvent(eventModel)">Edit</button>
-                                    </div>
-                                    <div class="col-12 mt-2">
-                                        <button class="btn btn-outline-danger rounded" @onclick="() => DeleteEvent(eventModel.EventName)">Delete</button>
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@eventModel.EventName</h5>
+                                <p class="card-text">@eventModel.Description</p>
+                                <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button class="btn btn-outline-primary rounded" @onclick="ToggleCreateForm">Create New Event</button>
+                                            <button class="btn btn-outline-primary rounded" @onclick="() => EditEvent(eventModel)">Edit</button>
+                                        </div>
+                                        <div class="col-12 mt-2">
+                                            <button class="btn btn-outline-danger rounded" @onclick="() => DeleteEvent(eventModel.EventName)">Delete</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                }
-            </div>
-        }
-        else
-        {
-            <p>No events available.</p>
-            <button class="btn btn-outline-primary rounded" @onclick="ToggleCreateForm">Create New Event</button>
-
-        }
-        @if (showEditForm)
-        {
-            <div>
-                @if (showSuccess)
-                {
-                    <div class="alert alert-success" role="alert">
-                        Event Edited successfully!
-                    </div>
+                    }
+                </div>
                 }
                 else
                 {
-                    <h3>Edit Event</h3>
-
-                    <EditForm Model="@editEvent" OnValidSubmit="@UpdateEvent">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
-
-                        <div class="form-group">
-                            <label for="eventName">Event Name:</label>
-                            <InputText id="eventName" @bind-Value="editEvent.EventName" class="form-control" disabled />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="description">Description:</label>
-                            <InputTextArea id="description" @bind-Value="editEvent.Description" class="form-control" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="eventDate">Event Date:</label>
-                            <InputDate id="eventDate" @bind-Value="editEvent.EventDate" class="form-control" />
-                        </div>
-
-                        <button type="submit" class="btn btn-primary mt-3">Save Event</button>
-                    </EditForm>
+                <div class="container mb-3">
+                    <p>No current events available.</p>
+                    <button class="btn btn-outline-primary rounded" @onclick="ToggleCreateForm">Create New Event</button>
+                </div>
                 }
-            </div>
-        }
-
-        <!-- Display form to create a new event -->
-        @if (showCreateForm)
-        {
-            <div>
-                @if (showSuccess)
+                @if (showEditForm)
                 {
-                    <div class="alert alert-success" role="alert">
-                        Event created successfully!
-                    </div>
-                }
-                else
-                {
-                    <h3>Create New Event</h3>
-
-                    <EditForm Model="@newEvent" OnValidSubmit="@CreateEvent">
-                        <DataAnnotationsValidator />
-                        <ValidationSummary />
-
-                        <div class="form-group">
-                            <label for="eventName">Event Name:</label>
-                            <InputText id="eventName" @bind-Value="newEvent.EventName" class="form-control" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="description">Description:</label>
-                            <InputTextArea id="description" @bind-Value="newEvent.Description" class="form-control" />
-                        </div>
-
-                        <div class="form-group">
-                            <label for="eventDate">Event Date:</label>
-                            <InputDate id="eventDate" @bind-Value="newEvent.EventDate" class="form-control" />
-                        </div>
-
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-12 mt-3">
-                                    <button type="submit" class="btn btn-primary">Save Event</button>
-                                    <button class="btn btn-outline-primary rounded me-3" @onclick="ToggleCreateForm">Cancel</button>
-                                </div>
+                    <div>
+                        @if (showSuccess)
+                        {
+                            <div class="alert alert-success" role="alert">
+                                Event Edited successfully!
                             </div>
-                        </div>
+                        }
+                        else
+                        {
+                            <h3>Edit Event</h3>
 
-                    </EditForm>
+                            <EditForm Model="@editEvent" OnValidSubmit="@UpdateEvent">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+
+                                <div class="form-group">
+                                    <label for="eventName">Event Name:</label>
+                                    <InputText id="eventName" @bind-Value="editEvent.EventName" class="form-control" disabled />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Description:</label>
+                                    <InputTextArea id="description" @bind-Value="editEvent.Description" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="eventDate">Event Date:</label>
+                                    <InputDate id="eventDate" @bind-Value="editEvent.EventDate" class="form-control" />
+                                </div>
+
+                                <button type="submit" class="btn btn-outline-primary mt-3">Save Event</button>
+                            </EditForm>
+                        }
+                    </div>
+                }
+
+                @if (showCreateForm)
+                {
+                    <div>
+                        @if (showSuccess)
+                        {
+                            <div class="alert alert-success" role="alert">
+                                Event created successfully!
+                            </div>
+                        }
+                        else
+                        {
+                            <h3>Create New Event</h3>
+
+                            <EditForm Model="@newEvent" OnValidSubmit="@CreateEvent">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+
+                                <div class="form-group">
+                                    <label for="eventName">Event Name:</label>
+                                    <InputText id="eventName" @bind-Value="newEvent.EventName" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Description:</label>
+                                    <InputTextArea id="description" @bind-Value="newEvent.Description" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="eventDate">Event Date:</label>
+                                    <InputDate id="eventDate" @bind-Value="newEvent.EventDate" class="form-control" />
+                                </div>
+
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 mt-3">
+                                            <button type="submit" class="btn btn-outline-primary">Save Event</button>
+                                            <button class="btn btn-outline-primary rounded me-3" @onclick="ToggleCreateForm">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </EditForm>
+                        }
+                    </div>
                 }
             </div>
-        }
-    </div>
 }
-<!-- View all events button -->
+
 @if (!IsOnEventsPage)
 {
     <div class="eventpage">
         <h2 class="text-center">Upcoming Event</h2>
 
         @if (events != null && events.Any())
-        {
-            <div class="card-deck">
-                @foreach (var eventModel in events)
-                {
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">@eventModel.EventName</h5>
-                            <p class="card-text">@eventModel.Description</p>
-                            <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button class="btn btn-outline-primary rounded" @onclick="ToggleCreateForm">Create New Event</button>
-                                        <button class="btn btn-outline-primary rounded" @onclick="() => EditEvent(eventModel)">Edit</button>
-                                    </div>
-                                    <div class="col-12 mt-2">
-                                        <button class="btn btn-outline-danger rounded" @onclick="() => DeleteEvent(eventModel.EventName)">Delete</button>
-                                        <button class="btn btn-outline-success rounded" @onclick="ViewAllEvents">View All Events</button>
+            {
+                var upcomingEvent = events.OrderBy(e => e.EventDate).First(); 
+
+                <div class="card-deck">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">@upcomingEvent.EventName</h5>
+                                <p class="card-text">@upcomingEvent.Description</p>
+                                <p class="card-text">Event Date: @upcomingEvent.EventDate.ToShortDateString()</p>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button class="btn btn-outline-primary rounded" @onclick="ToggleCreateForm">Create New Event</button>
+                                            <button class="btn btn-outline-primary rounded" @onclick="() => EditEvent(upcomingEvent)">Edit</button>
+                                        </div>
+                                        <div class="col-12 mt-2">
+                                            <button class="btn btn-outline-danger rounded" @onclick="() => DeleteEvent(upcomingEvent.EventName)">Delete</button>
+                                            <button class="btn btn-outline-success rounded" @onclick="ViewAllEvents">View All Events</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
-        }
+                </div>
+             }
         else
         {
-            <p>No events available.</p>
-            <button class="btn btn-outline-primary rounded" @onclick="ToggleCreateForm">Create New Event</button>
-
+            <div class="container mb-3">
+                <p>No current events available.</p>
+                <button class="btn btn-outline-primary rounded" @onclick="ToggleCreateForm">Create New Event</button>
+            </div>
         }
-        <!--Display form to Edit a event-->
+
         @if (showEditForm)
         {
             <div>
@@ -199,7 +203,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-12 mt-3">
-                                    <button type="submit" class="btn btn-primary">Save Event</button>
+                                    <button type="submit" class="btn btn-outline-primary">Save Event</button>
                                 </div>
                             </div>
                         </div>
@@ -208,7 +212,6 @@
             </div>
         }
 
-        <!-- Display form to create a new event -->
         @if (showCreateForm)
         {
             <div>
@@ -270,7 +273,6 @@
     {
         await LoadEvents();
     }
-    //TODO Fix Event recall to show correct eventId
     private async Task LoadEvents()
     {
         try
@@ -283,15 +285,12 @@
         }
     }
 
-    //TODO Create Edit Button Options
     private async void EditEvent(EventModel selectedEvent)
     {
         try
         {
-            // Assuming you have a method to retrieve the selected event details by its ID
             editEvent = await _db.GetEventByName(selectedEvent.EventName);
 
-            // Show the edit form
             showEditForm = true;
             showSuccess = false;
         }
@@ -343,7 +342,6 @@
             newEvent = new DisplayEventModel();
         }
     }
-    //TODO Fix CreateEvent to show correct eventId
 
     private async Task CreateEvent()
     {
