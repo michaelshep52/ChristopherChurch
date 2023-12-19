@@ -23,7 +23,7 @@ namespace ChristopherChurch.Data.Services
 
                 var builder = new BodyBuilder();
                 builder.TextBody =
-                    $"Prayer Request From: \n\n{name}\n\n{request}";
+                    $"Prayer Request \n\nFrom: {name}\n\n{request}";
 
                 message.Body = builder.ToMessageBody();
 
@@ -38,6 +38,7 @@ namespace ChristopherChurch.Data.Services
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error sending email: {ex}");
                 throw;
             }
         }

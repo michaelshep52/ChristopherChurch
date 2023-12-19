@@ -24,8 +24,6 @@ builder.Services.AddTransient<IPersonData, PersonData>();
 builder.Services.AddTransient<IEventsData, EventsData>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 //builder.Services.AddTransient<IEventModelService, EventModelService>();
-builder.Services.AddTransient<INpgsqlDataAccess, NpgsqlDataAccess>();
-builder.Services.AddScoped<IEventModelService, EventModelService>();
 //builder.Services.AddStripe(Configuration.GetSection("Stripe"));
 
 var app = builder.Build();

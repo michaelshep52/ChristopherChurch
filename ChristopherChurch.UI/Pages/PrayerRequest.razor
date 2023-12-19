@@ -36,7 +36,7 @@
                                         <ValidationMessage For="@(() => emailModel.Request)" />
 
                                     </div>
-                                    <button type="submit" class="btn btn-outline-primary" @onclick="Submitted">Submit Prayer</button>
+                                    <button type="submit" class="btn btn-outline-primary" @onclick="SubmitForm">Submit Prayer</button>
                                     <span style="font-weight:bold; font-size:28px; color:#c00;">@Message</span>
                                 </EditForm>
                             </div>
@@ -61,6 +61,8 @@
     {
         try
         {
+            isSubmitted = true;
+
             await EmailService.SendPrayerRequestAsync(emailModel.Name, emailModel.Request);
         }
         catch (Exception ex)
@@ -68,12 +70,6 @@
             Message = ex.Message;
 
         }
-    }
-
-    private async Task Submitted()
-    {
-         isSubmitted = true;
-        await Task.Delay(3000); // Delay for 3 seconds
     }
 }
 
