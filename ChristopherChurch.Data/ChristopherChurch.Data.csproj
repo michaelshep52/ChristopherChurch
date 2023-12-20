@@ -12,6 +12,7 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="Npgsql.Json.NET" Version="8.0.1" />
+    <PackageReference Include="Stripe.net" Version="43.7.0" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Models\" />

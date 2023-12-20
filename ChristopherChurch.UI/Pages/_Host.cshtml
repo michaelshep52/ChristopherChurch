@@ -15,6 +15,7 @@
     <link href="css/site.css" rel="stylesheet" />
     <link href="ChristopherChurch.UI.styles.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="favicon.png" />
+    <script src="https://js.stripe.com/v3/"></script>
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 <body>
@@ -32,7 +33,16 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
-    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>function openStripeCheckout(amount) {
+    var stripe = Stripe('pk_test_51O6z4WJ4ro8u8xiRmiio6Tl4ma44snic6oTMatnYpiI2WJLACKwLmykusa9WiUkFQHh8lCacOtxVww6eMeqk31mN00lhfvIoO0');
+            stripe.redirectToCheckout({
+                items: [{ sku: 'donation', quantity: 1 }],
+                successUrl: window.location.href,
+                cancelUrl: window.location.href,
+            });
+        }</script>
+
 </body>
 </html>
 

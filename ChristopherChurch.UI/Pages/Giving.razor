@@ -1,49 +1,111 @@
 ﻿@page "/Giving"
-<!--
-<form @onsubmit="MakePayment">
-    <label for="cardElement">
-        Credit or debit card
-    </label>
-    <div id="cardElement">
-    </div>
+@inject IConfiguration Configuration
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Threading.Tasks
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.Web
 
-    <div id="card-errors" role="alert"></div>
+<div class="givingform">
+    @if (!paymentInitiated)
+    {
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <h3 class="text-center">Give Now</h3>
+                <div class="text-center my-3">
+                    <button @onclick="InitiatePayment" class="btn btn-outline-primary">Initiate Payment</button>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            <div class="col">
+                <h3 class="text-center mb-3">Enter Payment Details</h3>
+                @{
+                    creditCard = new DisplayGivingModel(); // Initialize creditCard here
+                }
+                <EditForm Model="@creditCard" OnValidSubmit="MakePayment">
+                    <DataAnnotationsValidator />
 
-    <button type="submit">Submit Payment</button>
-</form>
--->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Card Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row mb-3">
+                                <label for="cardNumber" class="col-3 col-form-label">Card Number:</label>
+                                <div class="col-7">
+                                    <InputText type="text" id="cardNumber" class="form-control" @bind-Value="creditCard.Number" placeholder="0000 0000 0000 0000" />
+                                    <ValidationMessage For="@(() => creditCard.Number)" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-3">
+                                <label for="expirationDate" class="col-3 col-form-label">Expiration Date:</label>
+                                <div class="col-3">
+                                    <InputText type="text" id="expirationDate" class="form-control" @bind-Value="creditCard.ExpirationDate" placeholder="MM/YY" />
+                                    <ValidationMessage For="@(() => creditCard.ExpirationDate)" />
+                                </div>
+                            </div>
+                            <div class="form-group row mb-3">
+                                <label for="cvv" class="col-3 col-form-label">CVV:</label>
+                                <div class="col-3">
+                                    <InputText type="text" id="cvv" class="form-control" @bind-Value="creditCard.CVV" placeholder="000" />
+                                    <ValidationMessage For="@(() => creditCard.CVV)" />
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Submit Payment</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
-            private async Task MakePayment()
-            {
-                StripeConfiguration.ApiKey = "your_secret_key_here"; // Replace with your actual secret key
+    private bool paymentInitiated = false;
+    private DisplayGivingModel creditCard;
+    private int donationAmount;
 
-                var options = new PaymentIntentCreateOptions
-                {
-                    Amount = 1000, // Replace with the amount in cents
-                    Currency = "usd",
-                    Description = "Test Payment",
-                    Confirm = true,
-                };
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+
+    private async Task InitiatePayment()
+    {
+        // Call JavaScript function to open Stripe Checkout modal
+        await JSRuntime.InvokeAsync<object>("openStripeCheckout", donationAmount);
+        paymentInitiated = true;
+    }
+
+    private async Task MakePayment()
+    {
+        try
+        {
+            var service = new GivingService(Configuration);
+
+            // Create payment intent
+            var clientSecret = await service.CreateGivingIntent(donationAmount, "usd");
+
+            // Confirm the payment intent
+            var paymentIntent = await service.ConfirmPaymentIntent(clientSecret);
+
+            if (paymentIntent.Status == "succeeded")
+            {
+                // Payment successful, you can perform additional actions here
+                Console.WriteLine("Payment successful!");
+            }
+            else
+            {
+                // Payment failed, handle the error
+                Console.WriteLine("Payment failed. Error: " + paymentIntent.LastPaymentError?.Message);
             }
         }
-
-      <!-- var service = new PaymentIntentService();
-        var intent = service.Create(options);
-        var paymentIntent = await Stripe.StripeNet.StripeUtility.InitializeStripeClient()
-            .ConfirmPaymentIntentAsync(intent.Id);
-
-        if (paymentIntent.Status == "succeeded")
+        catch (Exception ex)
         {
-            // Payment successful, you can perform additional actions here
-            Console.WriteLine("Payment successful!");
+            // Handle exceptions
+            Console.WriteLine("An error occurred: " + ex.Message);
         }
-        else
-    {
-        // Payment failed, handle the error
-        Console.WriteLine("Payment failed. Error: " + paymentIntent.LastPaymentError?.Message);
     }
-    }
-}-->
-
-
+}
