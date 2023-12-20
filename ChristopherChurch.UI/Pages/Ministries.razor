@@ -1,10 +1,14 @@
 ﻿@page "/Ministries"
+@inject NavigationManager NavigationManager
+
+@if (NavigationManager.Uri.Contains("/Ministries"))
+{
     <div class="container-fluid pb-3">
         <div class="row justify-content-evenly">
-            <div class="col-12 p-3 mb-3">
+            <div class="col-12 ministries">
                 <h1 class="text-center">Ministries</h1>
             </div>
-            <div class="col-sm-10 ministries">
+            <div class="col-sm-11 ministries">
                 <ul class="list-unstyled d-grid gap-2">
                     <li>
                         <h4 class="text-center">All Team Members must have:</h4>
@@ -243,7 +247,30 @@
                 </ul>
             </div>
         </div>
-        <div class="col text-center">
+        <div class="col text-center mt-3">
             <button class="btn btn-outline-primary rounded" disabled>Join a Team!</button>
         </div>
     </div>
+}
+else
+{
+    <div class="ministry">
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <h3 class="text-center">Ministry</h3>
+                <h6>Explore our ministries and join a team to serve!</h6>
+                <div class="text-center my-3">
+                    <button @onclick="NavigateToMinistries" class="btn btn-outline-primary">Ministries</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@code {
+    private void NavigateToMinistries()
+    {
+        NavigationManager.NavigateTo("/Ministries");
+    }
+}

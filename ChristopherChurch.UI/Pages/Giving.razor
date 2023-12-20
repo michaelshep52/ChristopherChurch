@@ -1,111 +1,23 @@
 ﻿@page "/Giving"
-@inject IConfiguration Configuration
-@using Microsoft.AspNetCore.Components.Forms
-@using System.Threading.Tasks
-@using Microsoft.JSInterop
-@using Microsoft.AspNetCore.Components.Web
+@inject NavigationManager NavigationManager
 
+<!--TODO Finish setting up Stripe Payment Service-->
 <div class="givingform">
-    @if (!paymentInitiated)
-    {
-        <div class="row justify-content-center">
-            <div class="col-6">
-                <h3 class="text-center">Give Now</h3>
-                <div class="text-center my-3">
-                    <button @onclick="InitiatePayment" class="btn btn-outline-primary">Initiate Payment</button>
-                </div>
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <h3 class="text-center">Givings</h3>
+            <h6>It's amazing to see the difference a small contribution can make.</h6>
+            <div class="text-center my-3">
+                <button @onclick="LaunchStripeCheckout" class="btn btn-outline-primary">Donate</button>
             </div>
         </div>
-    }
-    else
-    {
-        <div class="row justify-content-center">
-            <div class="col">
-                <h3 class="text-center mb-3">Enter Payment Details</h3>
-                @{
-                    creditCard = new DisplayGivingModel(); // Initialize creditCard here
-                }
-                <EditForm Model="@creditCard" OnValidSubmit="MakePayment">
-                    <DataAnnotationsValidator />
-
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0">Card Information</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group row mb-3">
-                                <label for="cardNumber" class="col-3 col-form-label">Card Number:</label>
-                                <div class="col-7">
-                                    <InputText type="text" id="cardNumber" class="form-control" @bind-Value="creditCard.Number" placeholder="0000 0000 0000 0000" />
-                                    <ValidationMessage For="@(() => creditCard.Number)" />
-                                </div>
-                            </div>
-
-                            <div class="form-group row mb-3">
-                                <label for="expirationDate" class="col-3 col-form-label">Expiration Date:</label>
-                                <div class="col-3">
-                                    <InputText type="text" id="expirationDate" class="form-control" @bind-Value="creditCard.ExpirationDate" placeholder="MM/YY" />
-                                    <ValidationMessage For="@(() => creditCard.ExpirationDate)" />
-                                </div>
-                            </div>
-                            <div class="form-group row mb-3">
-                                <label for="cvv" class="col-3 col-form-label">CVV:</label>
-                                <div class="col-3">
-                                    <InputText type="text" id="cvv" class="form-control" @bind-Value="creditCard.CVV" placeholder="000" />
-                                    <ValidationMessage For="@(() => creditCard.CVV)" />
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block">Submit Payment</button>
-                        </div>
-                    </div>
-                </EditForm>
-            </div>
-        </div>
-    }
+    </div>
 </div>
 
 @code {
-    private bool paymentInitiated = false;
-    private DisplayGivingModel creditCard;
-    private int donationAmount;
-
-    [Inject]
-    private IJSRuntime JSRuntime { get; set; }
-
-    private async Task InitiatePayment()
+    private void LaunchStripeCheckout()
     {
-        // Call JavaScript function to open Stripe Checkout modal
-        await JSRuntime.InvokeAsync<object>("openStripeCheckout", donationAmount);
-        paymentInitiated = true;
-    }
-
-    private async Task MakePayment()
-    {
-        try
-        {
-            var service = new GivingService(Configuration);
-
-            // Create payment intent
-            var clientSecret = await service.CreateGivingIntent(donationAmount, "usd");
-
-            // Confirm the payment intent
-            var paymentIntent = await service.ConfirmPaymentIntent(clientSecret);
-
-            if (paymentIntent.Status == "succeeded")
-            {
-                // Payment successful, you can perform additional actions here
-                Console.WriteLine("Payment successful!");
-            }
-            else
-            {
-                // Payment failed, handle the error
-                Console.WriteLine("Payment failed. Error: " + paymentIntent.LastPaymentError?.Message);
-            }
-        }
-        catch (Exception ex)
-        {
-            // Handle exceptions
-            Console.WriteLine("An error occurred: " + ex.Message);
-        }
+        NavigationManager.NavigateTo("https://buy.stripe.com/test_14k8xTd6T87A7VC9AA");
     }
 }
+

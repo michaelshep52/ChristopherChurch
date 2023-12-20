@@ -1,17 +1,8 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using ChristopherChurch.UI.Data;
+﻿using ChristopherChurch.UI.Data;
 using ChristopherChurch.Data.DbAccess;
 using ChristopherChurch.Data.DataAccess;
-using Stripe;
-using Microsoft.Extensions.DependencyInjection;
-using ChristopherChurch.UI.Models;
-using ChristopherChurch.UI.Pages;
-using System.Configuration;
 using ChristopherChurch.Data.Services;
-using ChristopherChurch.Data.Models;
-using Npgsql;
-using System;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
