@@ -61,7 +61,7 @@
                                 <DataAnnotationsValidator />
                                 <div class="form-group">
                                     <label for="eventName">Event Name:</label>
-                                    <InputText id="eventName" @bind-Value="editEvent.EventName" class="form-control" disabled />
+                                    <InputText id="eventName" @bind-Value="editEvent!.EventName" class="form-control" disabled />
                                     <ValidationMessage For="@(() => newEvent.EventName)" />
                                 </div>
 
@@ -191,7 +191,7 @@
                         <DataAnnotationsValidator />
                         <div class="form-group">
                             <label for="eventName">Event Name:</label>
-                            <InputText id="eventName" @bind-Value="editEvent.EventName" class="form-control" disabled />
+                            <InputText id="eventName" @bind-Value="editEvent!.EventName" class="form-control" disabled />
                             <ValidationMessage For="@(() => newEvent.EventName)" />
                         </div>
 
@@ -266,16 +266,16 @@
 }
 
 @code {
-    private List<EventModel> events;
-    private EventModel editEvent;
+    private List<EventModel>? events;
+    private EventModel? editEvent;
     private DisplayEventModel newEvent = new DisplayEventModel { EventDate = DateTime.Today };
     private bool showCreateForm = false;
     public bool showEditForm = false;
     private bool showSuccess = false;
-    private bool IsOnEventsPage => NavigationManager.Uri.Contains("/events");
+    private bool IsOnEventsPage => NavigationManager!.Uri.Contains("/events");
 
 
-    [Inject] private NavigationManager NavigationManager { get; set; }
+    [Inject] private NavigationManager? NavigationManager { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -313,7 +313,7 @@
     {
         try
         {
-            await _db.UpdateEvent(editEvent);
+            await _db.UpdateEvent(editEvent!);
             await LoadEvents();
 
             showSuccess = true;
@@ -358,12 +358,12 @@
         {
             EventModel e = new EventModel
             {
-                EventName = newEvent.EventName,
-                Description = newEvent.Description,
+                EventName = newEvent.EventName!,
+                Description = newEvent.Description!,
                 EventDate = newEvent.EventDate
             };
             await _db.AddEvent(e);
-            events.Add(e);
+            events!.Add(e);
 
             newEvent = new DisplayEventModel();
 
@@ -380,6 +380,6 @@
 
     private void ViewAllEvents()
     {
-        NavigationManager.NavigateTo("/events");
+        NavigationManager!.NavigateTo("/events");
     }
 }

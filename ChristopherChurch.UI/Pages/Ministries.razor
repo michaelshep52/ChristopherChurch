@@ -248,7 +248,7 @@
             </div>
         </div>
         <div class="col text-center mt-3">
-            <button class="btn btn-outline-primary rounded" disabled>Join a Team!</button>
+            <button @onclick="NavigateToMinistryForm" class="btn btn-outline-primary rounded">Join a Team!</button>
         </div>
     </div>
 }
@@ -273,4 +273,9 @@ else
     {
         NavigationManager.NavigateTo("/Ministries");
     }
+    private void NavigateToMinistryForm()
+    {
+        NavigationManager.NavigateTo("/MinistryForm");
+    }
 }
+

@@ -214,3 +214,9 @@ iframe {
     border: 2px solid #E3E3E3;
     border-radius: 8px;
 }
+.ministryform {
+    padding: 2rem;
+    background-color: #D2D2D2;
+    margin: 0;
+}
+

@@ -48,7 +48,7 @@ namespace ChristopherChurch.Data.DbAccess
             try
             {
                 var data = await dataSource.QueryFirstOrDefaultAsync<T>(sql, parameters, commandType: CommandType.Text);
-                return data;
+                return data!;
             }
             catch (Exception ex)
             {
