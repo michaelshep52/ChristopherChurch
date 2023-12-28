@@ -13,7 +13,7 @@
     @if (isSubmitted)
     {
         <div class="col col-12 text-center">
-            <h5>Thanks for wanting to join our Team! Our leaders will review you form and be in contact with you soon.</h5>
+            <h5>Thank you for your application! Our Team will review you application and be in contact with you soon.</h5>
         </div>
     }
     else
@@ -268,7 +268,6 @@
                 Zip = newApplication.Zip!,
                 Authorization = newApplication.Authorization!
             };
-
             await ministryFormService!.SubmitApplicationForm(m);
             isSubmitted = true;
         }

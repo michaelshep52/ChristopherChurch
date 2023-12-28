@@ -2,7 +2,7 @@
 using ChristopherChurch.Data.DbAccess;
 using ChristopherChurch.Data.DataAccess;
 using ChristopherChurch.Data.Services;
-
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +17,8 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IMinistryFormService,MinistryFormService>();
 
 var app = builder.Build();
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

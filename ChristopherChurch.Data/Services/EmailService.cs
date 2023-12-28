@@ -53,7 +53,8 @@ namespace ChristopherChurch.Data.Services
                 message.Subject = "Ministry Application Form Submission";
 
                 var builder = new BodyBuilder();
-                builder.TextBody = "Attached is the Ministry Application Form submission.";
+
+                builder.TextBody = "Ministry Application Form.";
                 builder.Attachments.Add("MinistryApplicationForm.pdf", attachment, ContentType.Parse("application/pdf"));
 
                 message.Body = builder.ToMessageBody();

@@ -62,7 +62,7 @@
         {
             isSubmitted = true;
 
-            await EmailService.SendPrayerRequestAsync(emailModel.Name, emailModel.Request);
+            await EmailService.SendPrayerRequestAsync(emailModel.Name!, emailModel.Request!);
         }
         catch (Exception ex)
         {

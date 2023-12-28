@@ -1,16 +1,21 @@
 ﻿using ChristopherChurch.Data.Models;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing;
+using QuestPDF;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace ChristopherChurch.Data.Services
 {
     public class MinistryFormService : IMinistryFormService
     {
         private readonly IEmailService _emailService;
+        public MinistryApplicationModel Application { get; private set; }
 
         public MinistryFormService(IEmailService emailService)
         {
             _emailService = emailService;
+            Application = new MinistryApplicationModel(); 
+
         }
 
         public async Task SubmitApplicationForm(MinistryApplicationModel application)
@@ -24,25 +29,29 @@ namespace ChristopherChurch.Data.Services
         {
             try
             {
+                Application = application;
+
+                var document = Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Margin(50);
+
+                        page.Header().Element(ComposeHeader);
+                        page.Content().Element(RenderFormAsPdf);
+
+                        page.Footer().AlignCenter().Text(x =>
+                        {
+                            x.CurrentPageNumber();
+                            x.Span(" / ");
+                            x.TotalPages();
+                        });
+                    });
+                });
+
                 using (MemoryStream stream = new MemoryStream())
                 {
-                    // Create a new PDF document
-                    PdfDocument pdf = new PdfDocument();
-
-                    // Add a page to the document
-                    PdfPage page = pdf.AddPage();
-                    XGraphics gfx = XGraphics.FromPdfPage(page);
-
-                    // Set font and brush for drawing
-                    XFont font = new XFont("Verdana", 12, XFontStyleEx.Bold);
-                    XBrush brush = XBrushes.Black;
-
-                    // Draw the content on the PDF
-                    gfx.DrawString("Ministry Application Form", font, brush, 20, 20);
-                    RenderFormAsPdf(gfx, application);
-
-                    // Save the PDF to the memory stream
-                    pdf.Save(stream, false);
+                    document.GeneratePdf(stream);
                     return stream.ToArray();
                 }
             }
@@ -52,27 +61,47 @@ namespace ChristopherChurch.Data.Services
                 throw;
             }
         }
-
-        private void RenderFormAsPdf(XGraphics gfx, MinistryApplicationModel application)
+        private void ComposeHeader(IContainer container)
         {
-            XFont font = new XFont("Arial", 10);
-            float yPosition = 40;
+            var titleStyle = TextStyle.Default.FontSize(40).SemiBold().FontColor(Colors.Black);
 
-            RenderField(gfx, font, "First Name:", application.FirstName!, ref yPosition);
-            RenderField(gfx, font, "Last Name:", application.LastName!, ref yPosition);
-            RenderField(gfx, font, "Email:", application.Email!, ref yPosition);
-            RenderField(gfx, font, "Address:", application.Address!, ref yPosition);
-            RenderField(gfx, font, "Address 2:", application.Address2!, ref yPosition);
-            RenderField(gfx, font, "City:", application.City!, ref yPosition);
-            RenderField(gfx, font, "State:", application.State!, ref yPosition);
-            RenderField(gfx, font, "Zip:", application.Zip!, ref yPosition);
-            RenderField(gfx, font, "Authorization:", application.Authorization.ToString(), ref yPosition);
+            container.Row(row =>
+            {
+               /* row.RelativeItem()
+                       .Width(100).Padding(10).AlignLeft()
+                      .Image("https://raw.githubusercontent.com/michaelshep52/CCOGPictures/main/DarkLogo.jpg");
+               */
+                row.RelativeItem().Column(column =>
+                {
+                    column.Item().Text($"Ministry Application Form").Style(titleStyle);
+                });
+
+                row.ConstantItem(100).Height(50).Placeholder();
+            });
         }
 
-        private void RenderField(XGraphics gfx, XFont font, string label, string value, ref float yPosition)
+        private void RenderFormAsPdf(IContainer container)
         {
-            gfx.DrawString($"{label} {value}", font, XBrushes.Black, 20, yPosition);
-            yPosition += 20;
+            container.Column(column =>
+            {
+                try
+                {
+                    column.Item().Text($"First Name: {Application.FirstName}").FontSize(12);
+                    column.Item().Text($"Last Name: {Application.LastName}").FontSize(12);
+                    column.Item().Text($"Email: {Application.Email}").FontSize(12);
+                    column.Item().Text($"Address: {Application.Address}").FontSize(12);
+                    column.Item().Text($"Address 2: {Application.Address2}").FontSize(12);
+                    column.Item().Text($"City: {Application.City}").FontSize(12);
+                    column.Item().Text($"State: {Application.State}").FontSize(12);
+                    column.Item().Text($"Zip: {Application.Zip}").FontSize(12);
+                    column.Item().Text($"Authorization: {Application.Authorization}").FontSize(12);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error generating PDF: {ex.Message}");
+                    throw;
+                }
+            });
         }
     }
 }
