@@ -18,15 +18,12 @@
     <None Remove="DataAccess\" />
     <None Remove="DbAccess\" />
     <None Remove="Services\" />
-    <None Remove="Images\" />
-    <None Remove="Images\DarkCName.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="DataAccess\" />
     <Folder Include="DbAccess\" />
     <Folder Include="Services\" />
-    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Services\MinistryFormService.cs">
@@ -37,10 +34,5 @@
     <None Update="Images\DarkCName.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Images\DarkCName.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 </Project>

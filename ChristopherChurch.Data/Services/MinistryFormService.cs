@@ -1,5 +1,4 @@
 ﻿using ChristopherChurch.Data.Models;
-using QuestPDF;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -35,8 +34,8 @@ namespace ChristopherChurch.Data.Services
                 {
                     container.Page(page =>
                     {
-                        page.Margin(50);
-
+                        page.PageColor(Colors.White);
+                        page.Margin(40);
                         page.Header().Element(ComposeHeader);
                         page.Content().Element(RenderFormAsPdf);
 
@@ -61,40 +60,40 @@ namespace ChristopherChurch.Data.Services
                 throw;
             }
         }
+
+
         private void ComposeHeader(IContainer container)
         {
-            var titleStyle = TextStyle.Default.FontSize(40).SemiBold().FontColor(Colors.Black);
+            var titleStyle = TextStyle.Default.FontSize(35).Bold().FontColor(Colors.Black);
 
-            container.Row(row =>
+            container.Padding(40).Row(row =>
             {
-               /* row.RelativeItem()
-                       .Width(100).Padding(10).AlignLeft()
-                      .Image("https://raw.githubusercontent.com/michaelshep52/CCOGPictures/main/DarkLogo.jpg");
-               */
                 row.RelativeItem().Column(column =>
                 {
-                    column.Item().Text($"Ministry Application Form").Style(titleStyle);
+                    column.Item().Text($"Ministry Application").Style(titleStyle);
                 });
 
-                row.ConstantItem(100).Height(50).Placeholder();
+                row.ConstantItem(80).Height(80).Image("Images/DarkCName.jpg");
             });
         }
 
         private void RenderFormAsPdf(IContainer container)
         {
-            container.Column(column =>
+            var bodyStyle = TextStyle.Default.FontSize(15).SemiBold().LineHeight(2).FontColor(Colors.Black);
+
+            container.PaddingLeft(25).Column(column =>
             {
                 try
                 {
-                    column.Item().Text($"First Name: {Application.FirstName}").FontSize(12);
-                    column.Item().Text($"Last Name: {Application.LastName}").FontSize(12);
-                    column.Item().Text($"Email: {Application.Email}").FontSize(12);
-                    column.Item().Text($"Address: {Application.Address}").FontSize(12);
-                    column.Item().Text($"Address 2: {Application.Address2}").FontSize(12);
-                    column.Item().Text($"City: {Application.City}").FontSize(12);
-                    column.Item().Text($"State: {Application.State}").FontSize(12);
-                    column.Item().Text($"Zip: {Application.Zip}").FontSize(12);
-                    column.Item().Text($"Authorization: {Application.Authorization}").FontSize(12);
+                    column.Item().Text($"First Name: {Application.FirstName}").Style(bodyStyle);
+                    column.Item().Text($"Last Name: {Application.LastName}").Style(bodyStyle);
+                    column.Item().Text($"Email: {Application.Email}").Style(bodyStyle);
+                    column.Item().Text($"Address: {Application.Address}").Style(bodyStyle);
+                    column.Item().Text($"Address 2: {Application.Address2}").Style(bodyStyle);
+                    column.Item().Text($"City: {Application.City}").Style(bodyStyle);
+                    column.Item().Text($"State: {Application.State}").Style(bodyStyle);
+                    column.Item().Text($"Zip: {Application.Zip}").Style(bodyStyle);
+                    column.Item().Text($"Authorization: {Application.Authorization}").Style(bodyStyle);
                 }
                 catch (Exception ex)
                 {
