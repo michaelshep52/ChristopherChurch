@@ -1,5 +1,5 @@
 # ChristopherChurch
-Local small church Full stack web application utilizing Blazor, C#, HTML, and CSS.
+Local Church Full stack web application.
 ## Features
 * ASP.NET Blazor Server Application
 * HTML5
@@ -7,7 +7,7 @@ Local small church Full stack web application utilizing Blazor, C#, HTML, and CS
 * BootStrap5
 * JavaScript
 * C#
-* SQL
-* Postgres
+* Postgresql
 * MailKit (handling emails)
 * Stripe (handling payments)
+* QuestPDF (handling converting HTML to PDF)
