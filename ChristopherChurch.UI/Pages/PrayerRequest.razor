@@ -23,17 +23,17 @@
                                 <p>We would love to pray for you. Please fill out this form below to inform the Church of your needs.</p>
                             </div>
                             <div>
-                                <EditForm Model="@emailModel" OnValidSubmit="SubmitForm">
+                                <EditForm Model="@newEmail" OnValidSubmit="SubmitForm">
                                     <DataAnnotationsValidator />
                                     <div class="form-group pb-2">
                                         <label for="name">Your Name:</label>
-                                        <InputText type="text" id="name" @bind-Value="emailModel.Name" class="form-control" placeholder="ex. Jane Doe" />
-                                        <ValidationMessage For="@(() => emailModel.Name)" />
+                                        <InputText type="text" id="name" @bind-Value="newEmail.Name" class="form-control" placeholder="ex. Jane Doe" />
+                                        <ValidationMessage For="@(() => newEmail.Name)" />
                                     </div>
                                     <div class="form-group pb-2">
                                         <label for="request">Prayer Request:</label>
-                                        <InputTextArea id="request" @bind-Value="emailModel.Request" class="form-control" placeholder="ex. Pray for me."></InputTextArea>
-                                        <ValidationMessage For="@(() => emailModel.Request)" />
+                                        <InputTextArea id="request" @bind-Value="newEmail.Request" class="form-control" placeholder="ex. Pray for me."></InputTextArea>
+                                        <ValidationMessage For="@(() => newEmail.Request)" />
 
                                     </div>
                                     <button type="submit" class="btn btn-outline-primary" @onclick="SubmitForm">Submit Prayer</button>
@@ -50,7 +50,7 @@
 
 
 @code {
-    private EmailModel emailModel = new EmailModel();
+    private DisplayEmailModel newEmail = new DisplayEmailModel();
     private bool isSubmitted = false;
     private string Message { get; set; } = "";
 
@@ -58,9 +58,14 @@
     {
         try
         {
+            EmailModel emailModel = new EmailModel
+            {
+                Name = newEmail.Name!,
+                Request = newEmail.Request!,
+            };
             isSubmitted = true;
 
-            await EmailService.SendPrayerRequestAsync(emailModel.Name!, emailModel.Request!);
+            await EmailService.SendPrayerRequestAsync(newEmail.Name!, newEmail.Request!);
         }
         catch (Exception ex)
         {

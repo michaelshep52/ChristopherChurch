@@ -1,0 +1,81 @@
+﻿@page "/Events/Delete/{eventName}"
+@inject IEventsData _db
+
+<div class="eventpage">
+    @if (showConfirmation)
+    {
+        <div class="container mb-3">
+            <p>Are you sure you want to delete the event?</p>
+            <button class="btn btn-outline-danger rounded" @onclick="EventDeletion">Yes, Delete</button>
+            <button class="btn btn-outline-primary rounded" @onclick="CancelDelete">Cancel</button>
+        </div>
+    }
+    else if (showSuccess)
+    {
+        <div class="alert alert-success" role="alert">
+            <h4>Event Deleted successfully!</h4>
+            <button class="btn btn-outline-primary rounded" @onclick="NavigateToEvents">Events</button>
+            <button class="btn btn-outline-secondary rounded" @onclick="NavigateToHome">Back</button>
+        </div>
+    }
+    else
+    {
+        <h3>Delete Event</h3>
+        <p>Are you sure you want to delete the event with the name: @eventName?</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-outline-danger rounded" @onclick="ConfirmDelete">Delete</button>
+                    <button class="btn btn-outline-primary rounded" @onclick="NavigateToEvents">Events</button>
+                    <button class="btn btn-outline-primary rounded" @onclick="NavigateToHome">Back</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private bool showConfirmation = false;
+    private bool showSuccess = false;
+    private string? eventName;
+
+    [Inject] private NavigationManager? NavigationManager { get; set; }
+
+    [Parameter] public string? EventName { get; set; }
+
+    private void ConfirmDelete()
+    {
+        showConfirmation = true;
+    }
+
+    private void CancelDelete()
+    {
+        showConfirmation = false;
+    }
+
+    private async Task EventDeletion()
+    {
+        try
+        {
+            // Call the service method to delete the event from the database
+            await _db.DeleteEvent(eventName);
+
+            // Set showSuccess to true after successful deletion
+            showSuccess = true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting event: {ex.Message}");
+        }
+    }
+
+    private void NavigateToEvents()
+    {
+        NavigationManager!.NavigateTo("/Events");
+    }
+
+    private void NavigateToHome()
+    {
+        NavigationManager!.NavigateTo("/");
+    }
+}

@@ -2,6 +2,7 @@
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using static Npgsql.Replication.PgOutput.Messages.RelationMessage;
 
 namespace ChristopherChurch.Data.Services
 {
@@ -34,7 +35,7 @@ namespace ChristopherChurch.Data.Services
                 {
                     container.Page(page =>
                     {
-                        page.PageColor(Colors.White);
+                        page.PageColor(Colors.Grey.Lighten3);
                         page.Margin(40);
                         page.Header().Element(ComposeHeader);
                         page.Content().Element(RenderFormAsPdf);
@@ -72,8 +73,9 @@ namespace ChristopherChurch.Data.Services
                 {
                     column.Item().Text($"Ministry Application").Style(titleStyle);
                 });
+                //TODO: Create an logo on form.
+                //row.ConstantItem(80).Height(80).Image("Images/DarkCName.jpg").WithCompressionQuality(ImageCompressionQuality.High);
 
-                row.ConstantItem(80).Height(80).Image("Images/DarkCName.jpg");
             });
         }
 
@@ -85,15 +87,15 @@ namespace ChristopherChurch.Data.Services
             {
                 try
                 {
-                    column.Item().Text($"First Name: {Application.FirstName}").Style(bodyStyle);
-                    column.Item().Text($"Last Name: {Application.LastName}").Style(bodyStyle);
-                    column.Item().Text($"Email: {Application.Email}").Style(bodyStyle);
-                    column.Item().Text($"Address: {Application.Address}").Style(bodyStyle);
-                    column.Item().Text($"Address 2: {Application.Address2}").Style(bodyStyle);
-                    column.Item().Text($"City: {Application.City}").Style(bodyStyle);
-                    column.Item().Text($"State: {Application.State}").Style(bodyStyle);
-                    column.Item().Text($"Zip: {Application.Zip}").Style(bodyStyle);
-                    column.Item().Text($"Authorization: {Application.Authorization}").Style(bodyStyle);
+                    column.Item().Text($"First Name:    {Application.FirstName}").Style(bodyStyle);
+                    column.Item().Text($"Last Name:     {Application.LastName}").Style(bodyStyle);
+                    column.Item().Text($"Email:     {Application.Email}").Style(bodyStyle);
+                    column.Item().Text($"Address:       {Application.Address}").Style(bodyStyle);
+                    column.Item().Text($"Address 2:     {Application.Address2}").Style(bodyStyle);
+                    column.Item().Text($"City:      {Application.City}").Style(bodyStyle);
+                    column.Item().Text($"State:     {Application.State}").Style(bodyStyle);
+                    column.Item().Text($"Zip:       {Application.Zip}").Style(bodyStyle);
+                    column.Item().Text($"Authorization:     {Application.Authorization}").Style(bodyStyle);
                 }
                 catch (Exception ex)
                 {

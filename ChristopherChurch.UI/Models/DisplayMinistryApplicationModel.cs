@@ -41,6 +41,7 @@ namespace ChristopherChurch.UI.Models
         [Required(ErrorMessage = "Zip Code is Required.")]
         [StringLength(5, ErrorMessage = "Zip Code is too long.")]
         [MinLength(5, ErrorMessage = "Zip Code is too short.")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Invalid characters in the Zip.")]
         public string? Zip { get; set; }
 
 

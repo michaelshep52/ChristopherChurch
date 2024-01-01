@@ -44,7 +44,14 @@ namespace ChristopherChurch.Data.DbAccess
             var dataSourceBuilder = new NpgsqlConnectionStringBuilder(connectionString);
             var dataSource = new NpgsqlConnection(dataSourceBuilder.ConnectionString);
 
-            await dataSource.OpenAsync();
+            try
+            {
+                await dataSource.OpenAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error opening data source: {ex.Message}");
+            }
             try
             {
                 var data = await dataSource.QueryFirstOrDefaultAsync<T>(sql, parameters, commandType: CommandType.Text);

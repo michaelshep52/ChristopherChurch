@@ -1,8 +1,5 @@
-﻿@page "/Events"
+﻿@page "/Events/Display"
 @inject IEventsData _db
-
-<!--#TODO Create User Validation-->
-<!--#TODO Create Unique Event Name Validation-->
 
 <div class="eventpage">
     <h2 class="text-center">Events</h2>
@@ -10,14 +7,16 @@
     @if (events != null && events.Any())
     {
         <div class="row">
-            @foreach (var eventModel in events)
+            @if (events != null && events.Any())
             {
+                var upcomingEvent = events.OrderBy(e => e.EventDate).First();
+
                 <div class="col-md-4 mb-3">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">@eventModel.EventName</h5>
-                            <p class="card-text">@eventModel.Description</p>
-                            <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
+                            <h5 class="card-title">@upcomingEvent.EventName</h5>
+                            <p class="card-text">@upcomingEvent.Description</p>
+                            <p class="card-text">Event Date: @upcomingEvent.EventDate.ToShortDateString()</p>
                             <div class="container">
                                 <div class="row">
                                     <div class="col-12">
@@ -32,32 +31,28 @@
                         </div>
                     </div>
                 </div>
-                }
+            }
         </div>
-        }
-        else
-        {
+    }
+    else
+    {
         <div class="container mb-3">
             <p>No current events available.</p>
             <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
         </div>
-        }
+    }
 </div>
 
 @code {
     private List<EventModel>? events;
-    private bool showCreateForm = false;
-    public bool showEditForm = false;
-    private bool showSuccess = false;
-
 
     [Inject] private NavigationManager? NavigationManager { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         await LoadEvents();
-
     }
+
     private async Task LoadEvents()
     {
         try
@@ -69,17 +64,16 @@
             Console.WriteLine($"Error loading events: {ex.Message}");
         }
     }
-
     private void NavigateToEditEvent()
     {
         NavigationManager!.NavigateTo("/Events/Edit/{eventName}");
     }
-    private void NavigateToDeleteEvent()
-    {
-        NavigationManager!.NavigateTo("/Events/Delete/{eventName}");
-    }
     private void NavigateToCreateEvent()
     {
         NavigationManager!.NavigateTo("/Events/Create");
+    }
+    private void NavigateToDeleteEvent()
+    {
+        NavigationManager!.NavigateTo("/Events/Delete/{eventName}");
     }
 }

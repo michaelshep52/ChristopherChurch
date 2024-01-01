@@ -1,0 +1,109 @@
+﻿@page "/Events/Edit/{EventName}"
+@inject IEventsData _db
+
+<div class="eventpage">
+    @if (showSuccess)
+    {
+        <div class="alert alert-success" role="alert">
+            <h4>Event Edited successfully!</h4>
+            <button class="btn btn-outline-primary rounded" @onclick="NavigateToEvents">Events</button>
+            <button class="btn btn-outline-secondary rounded" @onclick="NavigateToHome">Back</button>
+        </div>
+    }
+    else
+    {
+        @if (editEvent != null)
+        {
+            <h3>Edit Event</h3>
+
+            <EditForm Model="@editEvent" OnValidSubmit="@UpdateEvent">
+                <DataAnnotationsValidator />
+                <div class="form-group">
+                    <label for="eventName">Event Name:</label>
+                    <InputText id="eventName" @bind-Value="editEvent!.EventName" class="form-control" disabled />
+                    <ValidationMessage For="@(() => editEvent.EventName)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <InputTextArea id="description" @bind-Value="editEvent.Description" class="form-control" />
+                    <ValidationMessage For="@(() => editEvent.Description)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDate">Event Date:</label>
+                    <InputDate id="eventDate" @bind-Value="editEvent.EventDate" class="form-control" />
+                    <ValidationMessage For="@(() => editEvent.EventDate)" />
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-outline-primary">Save Event</button>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        }
+        else
+        {
+            <p>Error: Event not found or null.</p>
+        }
+    }
+</div>
+
+@code {
+    private EventModel? editEvent;
+    private bool showSuccess = false;
+
+    [Inject] private NavigationManager? NavigationManager { get; set; }
+
+    [Parameter] public string? EventName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEvent();
+    }
+
+    private async Task LoadEvent()
+    {
+        try
+        {
+            // Load the specific event based on the EventName parameter
+            editEvent = await _db.GetEventByName(EventName);
+
+            if (editEvent == null)
+            {
+                // Handle the case where the event is not found
+                Console.WriteLine($"Error: Event not found for EventName: {EventName}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading event: {ex.Message}");
+        }
+    }
+
+    private async Task UpdateEvent()
+    {
+        try
+        {
+            showSuccess = true;
+            await _db.UpdateEvent(editEvent!);
+            // StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error updating event: {ex.Message}");
+        }
+    }
+
+    private void NavigateToEvents()
+    {
+        NavigationManager!.NavigateTo("/Events");
+    }
+
+    private void NavigateToHome()
+    {
+        NavigationManager!.NavigateTo("/");
+    }
+}
