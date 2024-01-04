@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.24" />
+    <PackageReference Include="Google.Apis.Auth.AspNetCore3" Version="1.64.0" />
+    <PackageReference Include="Google.Apis.Calendar.v3" Version="1.64.0.3248" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="Npgsql.Json.NET" Version="8.0.1" />
-    <PackageReference Include="QuestPDF" Version="2023.12.1" />
+    <PackageReference Include="QuestPDF" Version="2023.12.2" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Models\" />

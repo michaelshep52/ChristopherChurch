@@ -3,6 +3,7 @@ using ChristopherChurch.Data.DbAccess;
 using ChristopherChurch.Data.DataAccess;
 using ChristopherChurch.Data.Services;
 using QuestPDF.Infrastructure;
+using ChristopherChurch.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,9 +17,17 @@ builder.Services.AddTransient<IEventsData, EventsData>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IMinistryFormService,MinistryFormService>();
 
-var app = builder.Build();
+// Configure GoogleApiSettings from appsettings.json
+// ...
+
+// Configure GoogleApiSettings from appsettings.json
+var googleApiSettings = new GoogleApiSettings();
+builder.Configuration.Bind("GoogleApi", googleApiSettings);  
+builder.Services.Configure<GoogleApiSettings>(options => options = googleApiSettings);  // Fix here
 
 QuestPDF.Settings.License = LicenseType.Community;
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
