@@ -1,6 +1,6 @@
 # .gitignore
-appsettings.json
-.env
+**/appsettings.json
+
 
 
 # globs
