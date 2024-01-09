@@ -10,29 +10,26 @@
                 <img src="https://raw.githubusercontent.com/michaelshep52/CCOGPictures/main/DarkLogo.jpg" alt="Logo" class="logo-img">
             </a>
         </div>
-
-        <!-- Dropdown menu -->
         <div class="col-12">
             <div class="collapse navbar-collapse" style="display: @(isMenuOpen ? "block" : "none")">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <!-- ICONS from Iconify Bootstrap Icons -->
-                        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <NavLink class="nav-link" href="" Match="NavLinkMatch.All" @onclick="() => ToggleMenu()">
                             <span class="oi oi-home" aria-hidden="true"></span> Home
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="events">
+                        <NavLink class="nav-link" href="events" @onclick="() => ToggleMenu()">
                             <span class="oi oi-calendar" aria-hidden="true"></span> Events
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="Ministries">
+                        <NavLink class="nav-link" href="Ministries" @onclick="() => ToggleMenu()">
                             <span class="oi oi-clipboard" aria-hidden="true"></span> Ministries
                         </NavLink>
                     </li>
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="Person">
+                        <NavLink class="nav-link" href="Person" @onclick="() => ToggleMenu()">
                             <span class="oi oi-people" aria-hidden="true"></span> Person
                         </NavLink>
                     </li>
