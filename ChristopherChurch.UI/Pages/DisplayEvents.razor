@@ -20,11 +20,12 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-12">
-                                        <button class="btn btn-outline-primary rounded" @onclick="NavigateToEditEvent">Edit</button>
-                                        <button class="btn btn-outline-danger rounded" @onclick="NavigateToDeleteEvent">Delete</button>
+                                        <button class="btn btn-outline-primary rounded" @onclick="() => NavigateToEditEvent(upcomingEvent)">Edit</button>
+                                        <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
                                     </div>
                                     <div class="col-12 mt-2">
-                                        <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
+                                        <button class="btn btn-outline-primary rounded" @onclick="NavigateToAllEvents">All Events</button>
+                                        <button class="btn btn-outline-danger rounded" @onclick="() => NavigateToDeleteEvent(upcomingEvent)">Delete</button>
                                     </div>
                                 </div>
                             </div>
@@ -64,16 +65,35 @@
             Console.WriteLine($"Error loading events: {ex.Message}");
         }
     }
-    private void NavigateToEditEvent()
+    private void NavigateToEditEvent(EventModel eventModel)
     {
-        NavigationManager!.NavigateTo("/Events/Edit/{eventName}");
+        if (eventModel != null)
+        {
+            NavigationManager!.NavigateTo($"/Events/Edit/{eventModel.EventName}");
+        }
+        else
+        {
+            Console.WriteLine($"Error: Event not found for EventName: {eventModel!.EventName}");
+        }
     }
     private void NavigateToCreateEvent()
     {
         NavigationManager!.NavigateTo("/Events/Create");
     }
-    private void NavigateToDeleteEvent()
+    private void NavigateToDeleteEvent(EventModel eventModel)
     {
-        NavigationManager!.NavigateTo("/Events/Delete/{eventName}");
+        if (eventModel != null)
+        {
+            NavigationManager!.NavigateTo($"/Events/Delete/{eventModel.EventName}");
+        }
+        else
+        {
+            Console.WriteLine($"Error: Event not found for EventName: {eventModel!.EventName}");
+        }
     }
+    private void NavigateToAllEvents()
+    {
+        NavigationManager!.NavigateTo("/Events");
+    }
+
 }

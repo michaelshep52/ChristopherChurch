@@ -1,8 +1,8 @@
-﻿@page "/Events/Delete/{eventName}"
+﻿@page "/Events/Delete/{EventName}"
 @inject IEventsData _db
 
 <div class="eventpage">
-    @if (showConfirmation)
+    @if (deletionStage == DeletionStage.Confirmation)
     {
         <div class="container mb-3">
             <p>Are you sure you want to delete the event?</p>
@@ -10,9 +10,9 @@
             <button class="btn btn-outline-primary rounded" @onclick="CancelDelete">Cancel</button>
         </div>
     }
-    else if (showSuccess)
+    else if (deletionStage == DeletionStage.Success)
     {
-        <div class="alert alert-success" role="alert">
+        <div class="container mb-3">
             <h4>Event Deleted successfully!</h4>
             <button class="btn btn-outline-primary rounded" @onclick="NavigateToEvents">Events</button>
             <button class="btn btn-outline-secondary rounded" @onclick="NavigateToHome">Back</button>
@@ -21,12 +21,11 @@
     else
     {
         <h3>Delete Event</h3>
-        <p>Are you sure you want to delete the event with the name: @eventName?</p>
+        <p>Are you sure you want to delete event @deleteEvent?.EventName?</p>
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <button class="btn btn-outline-danger rounded" @onclick="ConfirmDelete">Delete</button>
-                    <button class="btn btn-outline-primary rounded" @onclick="NavigateToEvents">Events</button>
                     <button class="btn btn-outline-primary rounded" @onclick="NavigateToHome">Back</button>
                 </div>
             </div>
@@ -35,33 +34,75 @@
 </div>
 
 @code {
-    private bool showConfirmation = false;
-    private bool showSuccess = false;
-    private string? eventName;
+    private EventModel? deleteEvent;
+    private DeletionStage deletionStage = DeletionStage.Initial;
+
+    private enum DeletionStage
+    {
+        Initial,
+        Confirmation,
+        Success
+    }
 
     [Inject] private NavigationManager? NavigationManager { get; set; }
 
     [Parameter] public string? EventName { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEvent();
+    }
+
+    private async Task LoadEvent()
+    {
+        try
+        {
+            if (EventName != null)
+            {
+                // Load the specific event based on the EventName parameter
+                deleteEvent = await _db.GetEventByName(EventName);
+
+                if (deleteEvent == null)
+                {
+                    // Handle the case where the event is not found
+                    Console.WriteLine($"Error: Event not found for EventName: {EventName}");
+                }
+            }
+            else
+            {
+                // Handle the case where EventName is null
+                Console.WriteLine("Error: EventName is null.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading event: {ex.Message}");
+        }
+    }
+
     private void ConfirmDelete()
     {
-        showConfirmation = true;
+        deletionStage = DeletionStage.Confirmation;
     }
 
     private void CancelDelete()
     {
-        showConfirmation = false;
+        deletionStage = DeletionStage.Initial;
     }
 
     private async Task EventDeletion()
     {
         try
         {
-            // Call the service method to delete the event from the database
-            await _db.DeleteEvent(eventName);
-
-            // Set showSuccess to true after successful deletion
-            showSuccess = true;
+            if (deleteEvent != null)
+            {
+                await _db.DeleteEvent(deleteEvent.EventName);
+                deletionStage = DeletionStage.Success;
+            }
+            else
+            {
+                Console.WriteLine($"Error: Event not found for EventName: {EventName}");
+            }
         }
         catch (Exception ex)
         {

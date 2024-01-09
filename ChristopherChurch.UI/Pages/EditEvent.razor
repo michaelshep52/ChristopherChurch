@@ -4,7 +4,7 @@
 <div class="eventpage">
     @if (showSuccess)
     {
-        <div class="alert alert-success" role="alert">
+        <div>
             <h4>Event Edited successfully!</h4>
             <button class="btn btn-outline-primary rounded" @onclick="NavigateToEvents">Events</button>
             <button class="btn btn-outline-secondary rounded" @onclick="NavigateToHome">Back</button>
@@ -12,6 +12,10 @@
     }
     else
     {
+        @if (editEvent == null && !isLoading)
+        {
+            <p>Error: Event not found or null.</p>
+        }
         @if (editEvent != null)
         {
             <h3>Edit Event</h3>
@@ -46,7 +50,7 @@
         }
         else
         {
-            <p>Error: Event not found or null.</p>
+            <h4>Loading...</h4>
         }
     }
 </div>
@@ -54,6 +58,8 @@
 @code {
     private EventModel? editEvent;
     private bool showSuccess = false;
+    private bool isLoading = true;
+
 
     [Inject] private NavigationManager? NavigationManager { get; set; }
 
@@ -68,28 +74,36 @@
     {
         try
         {
-            // Load the specific event based on the EventName parameter
-            editEvent = await _db.GetEventByName(EventName);
-
-            if (editEvent == null)
+            if (EventName != null)
             {
-                // Handle the case where the event is not found
-                Console.WriteLine($"Error: Event not found for EventName: {EventName}");
+                editEvent = await _db.GetEventByName(EventName);
+
+                if (editEvent == null)
+                {
+                    Console.WriteLine($"Error: Event not found for EventName: {EventName}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error: EventName is null.");
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading event: {ex.Message}");
         }
+        finally
+        {
+            isLoading = false;
+        }
     }
-
     private async Task UpdateEvent()
     {
         try
         {
-            showSuccess = true;
             await _db.UpdateEvent(editEvent!);
-            // StateHasChanged();
+            showSuccess = true;
+            StateHasChanged();
         }
         catch (Exception ex)
         {

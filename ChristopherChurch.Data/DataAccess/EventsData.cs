@@ -1,8 +1,4 @@
-﻿using System;
-using Npgsql;
-using System.Data;
-using Dapper;
-using ChristopherChurch.Data.DbAccess;
+﻿using ChristopherChurch.Data.DbAccess;
 using ChristopherChurch.Data.Models;
 
 

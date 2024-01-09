@@ -1,5 +1,7 @@
 # .gitignore
 appsettings.json
+.env
+
 
 # globs
 Makefile.in
