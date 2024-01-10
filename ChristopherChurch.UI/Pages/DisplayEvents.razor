@@ -6,33 +6,30 @@
 
     @if (events != null && events.Any())
     {
-        <div class="row">
-            @if (events != null && events.Any())
-            {
-                var upcomingEvent = events.OrderBy(e => e.EventDate).First();
+        var upcomingEvent = events.OrderBy(e => e.EventDate).First();
 
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">@upcomingEvent.EventName</h5>
-                            <p class="card-text">@upcomingEvent.Description</p>
-                            <p class="card-text">Event Date: @upcomingEvent.EventDate.ToShortDateString()</p>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button class="btn btn-outline-primary rounded" @onclick="() => NavigateToEditEvent(upcomingEvent)">Edit</button>
-                                        <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
-                                    </div>
-                                    <div class="col-12 mt-2">
-                                        <button class="btn btn-outline-primary rounded" @onclick="NavigateToAllEvents">All Events</button>
-                                        <button class="btn btn-outline-danger rounded" @onclick="() => NavigateToDeleteEvent(upcomingEvent)">Delete</button>
-                                    </div>
+        <div class="row mb-3">
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="card-body">
+                        <h5 class="card-title">@upcomingEvent.EventName</h5>
+                        <p class="card-text">@upcomingEvent.Description</p>
+                        <p class="card-text">Event Date: @upcomingEvent.EventDate.ToShortDateString()</p>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button class="btn btn-outline-primary rounded" @onclick="() => NavigateToEditEvent(upcomingEvent)">Edit</button>
+                                    <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <button class="btn btn-outline-primary rounded" @onclick="NavigateToAllEvents">All Events</button>
+                                    <button class="btn btn-outline-danger rounded" @onclick="() => NavigateToDeleteEvent(upcomingEvent)">Delete</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            }
+            </div>
         </div>
     }
     else
