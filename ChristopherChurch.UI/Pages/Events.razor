@@ -1,6 +1,5 @@
 ﻿@page "/Events"
 @inject IEventsData _db
-
 <!--#TODO Create User Validation-->
 <!--#TODO Create Unique Event Name Validation-->
 <div class="container-fluid">
@@ -16,17 +15,19 @@
         {
             @foreach (var eventModel in events)
             {
-                <div class="col-md-6 ms-4 eventpage">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">@eventModel.EventName</h5>
-                            <p class="card-text">@eventModel.Description</p>
-                            <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button class="btn btn-outline-primary rounded" @onclick="() => NavigateToEditEvent(eventModel)">Edit</button>
-                                        <button class="btn btn-outline-danger rounded" @onclick="() => NavigateToDeleteEvent(eventModel)">Delete</button>
+                <div class="col-md-6">
+                    <div class="eventpage">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@eventModel.EventName</h5>
+                                <p class="card-text">@eventModel.Description</p>
+                                <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button class="btn btn-outline-primary rounded" @onclick="() => NavigateToEditEvent(eventModel)">Edit</button>
+                                            <button class="btn btn-outline-danger rounded" @onclick="() => NavigateToDeleteEvent(eventModel)">Delete</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -37,18 +38,14 @@
         }
         else
         {
-            <div class="eventpage">
+            <div class="col-md-12 eventpage">
                 <p>No current events available.</p>
                 <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
             </div>
         }
-
     </div>
-    <div class="col-12 my-3 d-flex justify-content-center">
-        <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
-    </div>
-
 </div>
+
 
 @code {
     private List<EventModel>? events;
