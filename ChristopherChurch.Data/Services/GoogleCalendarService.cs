@@ -28,7 +28,7 @@ namespace ChristopherChurch.Data.Services
             _calendarService = new CalendarService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = GetCredentials(clientId, clientSecret, redirectUri),
-                ApplicationName = "YourAppName",
+                ApplicationName = "Christopherchurch",
             });
         }
 

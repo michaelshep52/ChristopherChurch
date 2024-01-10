@@ -17,13 +17,13 @@ builder.Services.AddTransient<IEventsData, EventsData>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IMinistryFormService,MinistryFormService>();
 
-// Configure GoogleApiSettings from appsettings.json
-// ...
+var emailSettings = new EmailSettings();
+builder.Configuration.Bind("EmailSettings", emailSettings);
+builder.Services.Configure<EmailSettings>(options => builder.Configuration.GetSection("EmailSettings").Bind(emailSettings));
 
-// Configure GoogleApiSettings from appsettings.json
 var googleApiSettings = new GoogleApiSettings();
 builder.Configuration.Bind("GoogleApi", googleApiSettings);  
-builder.Services.Configure<GoogleApiSettings>(options => options = googleApiSettings);  // Fix here
+builder.Services.Configure<GoogleApiSettings>(options => options = googleApiSettings);  
 
 QuestPDF.Settings.License = LicenseType.Community;
 

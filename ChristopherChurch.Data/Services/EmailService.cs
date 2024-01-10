@@ -11,15 +11,16 @@ namespace ChristopherChurch.Data.Services
         {
             _configuration = configuration;
         }
-
+       
         public async Task SendPrayerRequestAsync(string name, string request)
         {
             try
             {
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Software Developer", "sdcodemail@gmail.com"));
-                message.To.Add(new MailboxAddress("Michael", "michaelshep52@gmail.com"));
+                message.From.Add(new MailboxAddress(_configuration["EmailSettings:SenderName"], _configuration["EmailSettings:SenderEmail"]));
+                message.To.Add(new MailboxAddress(_configuration["EmailSettings:RecipientName"], _configuration["EmailSettings:RecipientEmail"]));
                 message.Subject = "Prayer Request";
+
 
                 var builder = new BodyBuilder();
                 builder.TextBody =
@@ -29,8 +30,8 @@ namespace ChristopherChurch.Data.Services
 
                 using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
-                    await client.ConnectAsync("smtp.gmail.com", 587, false);
-                    await client.AuthenticateAsync("sdcodemail@gmail.com", "rojz bsvp rnyn pqlu");
+                    await client.ConnectAsync(_configuration["EmailSettings:SmtpServer"], int.Parse(_configuration["EmailSettings:SmtpPort"]), bool.Parse(_configuration["EmailSettings:UseSsl"]));
+                    await client.AuthenticateAsync(_configuration["EmailSettings:SenderEmail"], _configuration["EmailSettings:Password"]);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
                 }
@@ -48,8 +49,8 @@ namespace ChristopherChurch.Data.Services
             try
             {
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Software Developer", "sdcodemail@gmail.com"));
-                message.To.Add(new MailboxAddress("Michael", "michaelshep52@gmail.com"));
+                message.From.Add(new MailboxAddress(_configuration["EmailSettings:SenderName"], _configuration["EmailSettings:SenderEmail"]));
+                message.To.Add(new MailboxAddress(_configuration["EmailSettings:RecipientName"], _configuration["EmailSettings:RecipientEmail"]));
                 message.Subject = "Ministry Application Form Submission";
 
                 var builder = new BodyBuilder();
@@ -61,8 +62,8 @@ namespace ChristopherChurch.Data.Services
 
                 using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
-                    await client.ConnectAsync("smtp.gmail.com", 587, false);
-                    await client.AuthenticateAsync("sdcodemail@gmail.com", "rojz bsvp rnyn pqlu");
+                    await client.ConnectAsync(_configuration["EmailSettings:SmtpServer"], int.Parse(_configuration["EmailSettings:SmtpPort"]), bool.Parse(_configuration["EmailSettings:UseSsl"]));
+                    await client.AuthenticateAsync(_configuration["EmailSettings:SenderEmail"], _configuration["EmailSettings:Password"]);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
                 }

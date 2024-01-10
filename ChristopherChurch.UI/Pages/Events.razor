@@ -3,16 +3,20 @@
 
 <!--#TODO Create User Validation-->
 <!--#TODO Create Unique Event Name Validation-->
-
-<div class="eventpage">
-    <h2 class="text-center">Events</h2>
-
-    @if (events != null && events.Any())
-    {
-        <div class="row">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="eventpage">
+                <h2 class="text-center">Events</h2>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        @if (events != null && events.Any())
+        {
             @foreach (var eventModel in events)
             {
-                <div class="col-md-4 mb-3">
+                <div class="col-md-6 ms-4 eventpage">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">@eventModel.EventName</h5>
@@ -24,24 +28,26 @@
                                         <button class="btn btn-outline-primary rounded" @onclick="() => NavigateToEditEvent(eventModel)">Edit</button>
                                         <button class="btn btn-outline-danger rounded" @onclick="() => NavigateToDeleteEvent(eventModel)">Delete</button>
                                     </div>
-                                    <div class="col-12 mt-2">
-                                        <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                }
-        </div>
+            }
         }
         else
         {
-        <div class="container mb-3">
-            <p>No current events available.</p>
-            <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
-        </div>
+            <div class="eventpage">
+                <p>No current events available.</p>
+                <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
+            </div>
         }
+
+    </div>
+    <div class="col-12 my-3 d-flex justify-content-center">
+        <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
+    </div>
+
 </div>
 
 @code {
