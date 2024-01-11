@@ -25,39 +25,39 @@
                     <div class="form-row">
                         <div class="form-group col-8 p-2">
                             <label for="inputFirstName">First Name</label>
-                            <InputText id="inputFirstName" type="text" @bind-Value="newApplication.FirstName" name="name" autocomplete="name"  class="form-control" placeholder="Jane" />
+                            <InputText id="inputFirstName" type="text" @bind-Value="newApplication.FirstName" name="name" autocomplete="name" class="form-control border-black" placeholder="Jane" />
                             <ValidationMessage For="@(() => newApplication.FirstName)" />
                         </div>
                         <div class="form-group col-8 p-2">
                             <label for="inputLastName">Last Name</label>
-                            <InputText id="inputLastName" type="text" @bind-Value="newApplication.LastName" class="form-control" placeholder="Doe" />
+                            <InputText id="inputLastName" type="text" @bind-Value="newApplication.LastName" class="form-control border-black" placeholder="Doe" />
                             <ValidationMessage For="@(() => newApplication.LastName)" />
                         </div>
                         <div class="form-group col-8 p-2">
                             <label for="inputEmail">Email</label>
-                            <InputText id="inputEmail" type="email" @bind-Value="newApplication.Email" name="email" autocomplete="email" class="form-control" placeholder="jdoe@google.com" />
+                            <InputText id="inputEmail" type="email" @bind-Value="newApplication.Email" name="email" autocomplete="email" class="form-control border-black" placeholder="jdoe@google.com" />
                             <ValidationMessage For="@(() => newApplication.Email)" />
                         </div>
                     </div>
                     <div class="form-group col-8 p-2">
                         <label for="inputAddress">Address</label>
-                        <InputText id="inputAddress" type="text" @bind-Value="newApplication.Address" class="form-control" placeholder="1234 Main St" />
+                        <InputText id="inputAddress" type="text" @bind-Value="newApplication.Address" class="form-control border-black" placeholder="1234 Main St" />
                         <ValidationMessage For="@(() => newApplication.Address)" />
                     </div>
                     <div class="form-group col-8 p-2">
                         <label for="inputAddress2">Address 2</label>
-                        <InputText id="inputAddress2" type="text" @bind-Value="newApplication.Address2" class="form-control" placeholder="Apartment, studio, or floor" />
+                        <InputText id="inputAddress2" type="text" @bind-Value="newApplication.Address2" class="form-control border-black" placeholder="Apartment, studio, or floor" />
                         <ValidationMessage For="@(() => newApplication.Address2)" />
                     </div>
                     <div class="form-row">
                         <div class="form-group col-5 p-2">
                             <label for="inputCity">City</label>
-                            <InputText id="inputCity" type="text" @bind-Value="newApplication.City" name="City" autocomplete="address-level2"  class="form-control" placeholder="Jeff" />
+                            <InputText id="inputCity" type="text" @bind-Value="newApplication.City" name="City" autocomplete="address-level2" class="form-control border-black" placeholder="Jeff" />
                             <ValidationMessage For="@(() => newApplication.City)" />
                         </div>
                         <div class="form-group col-5 p-2">
                             <label for="inputState">State</label>
-                            <InputSelect id="inputState" @bind-Value="newApplication.State" name="state" autocomplete="address-level1"  class="form-control">
+                            <InputSelect id="inputState" @bind-Value="newApplication.State" name="state" autocomplete="address-level1"  class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>AK</option>
                                 <option>AZ</option>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="form-group col-5 p-2">
                             <label for="inputZip">Zip Code</label>
-                            <InputText id="inputZip" type="text" @bind-Value="newApplication.Zip" name="zip" autocomplete="postal-code"   class="form-control" placeholder="41701" />
+                            <InputText id="inputZip" type="text" @bind-Value="newApplication.Zip" name="zip" autocomplete="postal-code"   class="form-control border-black" placeholder="41701" />
                             <ValidationMessage For="@(() => newApplication.Zip)" />
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                     </div>
                     <div class="form-group col-8 p-2">
                         <label for="inputMinistry">Choose a Ministry Team</label>
-                        <InputSelect id="inputMinistry" @bind-Value="newApplication.SelectedMinistry" class="form-control">
+                        <InputSelect id="inputMinistry" @bind-Value="newApplication.SelectedMinistry" class="form-control border-black">
                         <ValidationMessage For="@(() => newApplication.SelectedMinistry)" />
 
                             <option selected>Choose...</option>
@@ -135,7 +135,7 @@
                     {
                         <div class="form-group col-8 p-2" style="@($"display: {(newApplication.SelectedMinistry == "Teacher" ? "block" : "none")};")">
                             <label for="inputTeaching">Teaching Team</label>
-                            <select id="inputTeaching" class="form-control">
+                            <select id="inputTeaching" class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>Adult Sunday School</option>
                                 <option>Teen Sunday School</option>
@@ -147,7 +147,7 @@
                         </div>
                         <div class="form-group col-8 p-2" style="@($"display: {(newApplication.SelectedMinistry == "Custodian" ? "block" : "none")};")">
                             <label for="inputCustodian">Custodian Team</label>
-                            <select id="inputCustodian" class="form-control">
+                            <select id="inputCustodian" class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>Bathroom</option>
                                 <option>Sanctuary</option>
@@ -157,7 +157,7 @@
                         </div>
                         <div class="form-group col-8 p-2" style="@($"display: {(newApplication.SelectedMinistry == "Cook" ? "block" : "none")};")">
                             <label for="inputCook">Cooking Team</label>
-                            <select id="inputCook" class="form-control">
+                            <select id="inputCook" class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>Sunday School</option>
                                 <option>Wednesday Night</option>
@@ -166,7 +166,7 @@
                         </div>
                         <div class="form-group col-8 p-2" style="@($"display: {(newApplication.SelectedMinistry == "Worship" ? "block" : "none")};")">
                             <label for="inputWorship">Worship Team</label>
-                            <select id="inputWorship" class="form-control">
+                            <select id="inputWorship" class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>Guitar Player</option>
                                 <option>Bass Player</option>
@@ -177,7 +177,7 @@
                         </div>
                         <div class="form-group col-8 p-2" style="@($"display: {(newApplication.SelectedMinistry == "Greeter" ? "block" : "none")};")">
                             <label for="inputGreeter">Greeter Team</label>
-                            <select id="inputGreeter" class="form-control">
+                            <select id="inputGreeter" class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>Front Door</option>
                                 <option>Parking Lot</option>
@@ -185,7 +185,7 @@
                         </div>
                         <div class="form-group col-8 p-2" style="@($"display: {(newApplication.SelectedMinistry == "Lawn Care" ? "block" : "none")};")">
                             <label for="inputLawn">Lawn Care Team</label>
-                            <select id="inputLawn" class="form-control">
+                            <select id="inputLawn" class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>Weedeater</option>
                                 <option>Trimmer</option>
@@ -194,7 +194,7 @@
                         </div>
                         <div class="form-group col-8 p-2" style="@($"display: {(newApplication.SelectedMinistry == "Parking Lot Care" ? "block" : "none")};")">
                             <label for="inputParking">Parking Lot Care Team</label>
-                            <select id="inputParking" class="form-control">
+                            <select id="inputParking" class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>Trash Pickup</option>
                                 <option>Parking</option>
@@ -202,7 +202,7 @@
                         </div>
                         <div class="form-group col-8 p-2" style="@($"display: {(newApplication.SelectedMinistry == "Technical" ? "block" : "none")};")">
                             <label for="inputTechnical">Technical Team</label>
-                            <select id="inputTechnical" class="form-control">
+                            <select id="inputTechnical" class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>Computer</option>
                                 <option>Sound Board</option>
@@ -210,7 +210,7 @@
                         </div>
                         <div class="form-group col-8 p-2" style="@($"display: {(newApplication.SelectedMinistry == "Outreach" ? "block" : "none")};")">
                             <label for="inputOutreach">Outreach Team</label>
-                            <select id="inputOutreach" class="form-control">
+                            <select id="inputOutreach" class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>Broshears</option>
                                 <option>Marketing</option>
@@ -219,7 +219,7 @@
                         </div>
                         <div class="form-group col-8 p-2" style="@($"display: {(newApplication.SelectedMinistry == "Care" ? "block" : "none")};")">
                             <label for="inputCare">Care Team</label>
-                            <select id="inputCare" class="form-control">
+                            <select id="inputCare" class="form-control border-black">
                                 <option selected>Choose...</option>
                                 <option>Calling</option>
                                 <option>Communication(Messaging)</option>
@@ -230,7 +230,7 @@
                     }
                     <div class="form-group">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" @bind="@newApplication.Authorization" id="invalidCheck" required>
+                            <input class="form-check-input border-black" type="checkbox" @bind="@newApplication.Authorization" id="invalidCheck" required>
                             <label class="form-check-label" for="invalidCheck">
                                 Authorization for background check
                             </label>

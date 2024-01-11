@@ -27,12 +27,12 @@
                                     <DataAnnotationsValidator />
                                     <div class="form-group pb-2">
                                         <label for="name">Your Name:</label>
-                                        <InputText type="text" id="name" @bind-Value="newEmail.Name" class="form-control" placeholder="ex. Jane Doe" />
+                                        <InputText type="text" id="name" @bind-Value="newEmail.Name" class="form-control border-black" placeholder="ex. Jane Doe" />
                                         <ValidationMessage For="@(() => newEmail.Name)" />
                                     </div>
                                     <div class="form-group pb-2">
                                         <label for="request">Prayer Request:</label>
-                                        <InputTextArea id="request" @bind-Value="newEmail.Request" class="form-control" placeholder="ex. Pray for me."></InputTextArea>
+                                        <InputTextArea id="request" @bind-Value="newEmail.Request" class="form-control border-black" placeholder="ex. Pray for me."></InputTextArea>
                                         <ValidationMessage For="@(() => newEmail.Request)" />
 
                                     </div>

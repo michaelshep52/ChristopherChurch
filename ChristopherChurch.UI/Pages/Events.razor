@@ -38,11 +38,17 @@
         }
         else
         {
-            <div class="col-md-12 eventpage">
-                <p>No current events available.</p>
-                <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
+            <div class="col-12 my-2 d-flex justify-content-center">
+                <div class="eventpage">
+                    <p>No current events available.</p>
+                </div>
             </div>
         }
+    </div>
+    <div class="row">
+        <div class="col-12 my-2 d-flex justify-content-center">
+            <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
+        </div>
     </div>
 </div>
 

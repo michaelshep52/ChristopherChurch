@@ -183,6 +183,10 @@ iframe {
     background: black;
     padding: 1rem;
 }
+.border-black {
+    border: 1px solid black;
+}
+
 
 .socialpage {
     background-color: #000000;
