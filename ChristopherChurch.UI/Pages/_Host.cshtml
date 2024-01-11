@@ -34,15 +34,9 @@
 
     <script src="_framework/blazor.server.js"></script>
 
-    <script>function openStripeCheckout(amount) {
-    var stripe = Stripe('pk_test_51O6z4WJ4ro8u8xiRmiio6Tl4ma44snic6oTMatnYpiI2WJLACKwLmykusa9WiUkFQHh8lCacOtxVww6eMeqk31mN00lhfvIoO0');
-            stripe.redirectToCheckout({
-                items: [{ sku: 'donation', quantity: 1 }],
-                successUrl: window.location.href,
-                cancelUrl: window.location.href,
-            });
-        }</script>
-
+    <script async
+            src="https://js.stripe.com/v3/buy-button.js">
+    </script>
 </body>
 </html>
 
