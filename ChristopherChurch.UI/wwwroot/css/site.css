@@ -167,6 +167,7 @@ iframe {
 }
 .servicebox, .eventpage, .prayform, .giving, .ministry {
     background-color: #D2D2D2;
+    color: #000000;
     border: 3px solid #e8e8e8;
     border-radius: 0.375rem;
     padding: 1.5rem;
