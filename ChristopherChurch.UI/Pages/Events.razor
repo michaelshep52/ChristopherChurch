@@ -55,11 +55,6 @@
 
 @code {
     private List<EventModel>? events;
-    private bool showCreateForm = false;
-    public bool showEditForm = false;
-    private bool showSuccess = false;
-
-
     [Inject] private NavigationManager? NavigationManager { get; set; }
 
     protected override async Task OnInitializedAsync()

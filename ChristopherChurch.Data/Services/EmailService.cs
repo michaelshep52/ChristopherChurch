@@ -30,7 +30,7 @@ namespace ChristopherChurch.Data.Services
 
                 using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
-                    await client.ConnectAsync(_configuration["EmailSettings:SmtpServer"], int.Parse(_configuration["EmailSettings:SmtpPort"]), bool.Parse(_configuration["EmailSettings:UseSsl"]));
+                    await client.ConnectAsync(_configuration["EmailSettings:SmtpServer"], int.Parse(_configuration["EmailSettings:SmtpPort"]!), bool.Parse(_configuration["EmailSettings:UseSsl"]!));
                     await client.AuthenticateAsync(_configuration["EmailSettings:SenderEmail"], _configuration["EmailSettings:Password"]);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
@@ -62,7 +62,7 @@ namespace ChristopherChurch.Data.Services
 
                 using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
-                    await client.ConnectAsync(_configuration["EmailSettings:SmtpServer"], int.Parse(_configuration["EmailSettings:SmtpPort"]), bool.Parse(_configuration["EmailSettings:UseSsl"]));
+                    await client.ConnectAsync(_configuration["EmailSettings:SmtpServer"], int.Parse(_configuration["EmailSettings:SmtpPort"]!), bool.Parse(_configuration["EmailSettings:UseSsl"]!));
                     await client.AuthenticateAsync(_configuration["EmailSettings:SenderEmail"], _configuration["EmailSettings:Password"]);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
