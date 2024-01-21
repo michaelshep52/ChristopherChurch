@@ -1,0 +1,37 @@
+﻿@page "/Profile"
+@attribute [Authorize]
+
+<PageTitle>Profile</PageTitle>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <h2>Profile</h2>
+            <div class="col-md-4">
+                <h3>@Username</h3>
+                <p>Email: @Email</p>
+                <p>Picture: <img src="@Picture" alt="User Picture" /></p>
+                <!-- Add more fields as needed -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+    private string Username = "";
+    private string Email = "";
+    private string Picture = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthenticationStateTask!;
+
+        Username = state.User.Identity?.Name ?? string.Empty;
+        Email = state.User.FindFirst("email")?.Value ?? string.Empty;
+        Picture = state.User.FindFirst("picture")?.Value ?? string.Empty;
+
+        await base.OnInitializedAsync();
+    }
+}
