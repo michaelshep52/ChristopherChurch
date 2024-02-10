@@ -165,7 +165,7 @@ iframe {
     display: block;
     margin: 0 auto;
 }
-.servicebox, .eventpage, .prayform, .giving, .ministry {
+.servicebox, .eventpage, .prayform, .giving, .ministry, .generalpage {
     background-color: #D2D2D2;
     color: #000000;
     border: 3px solid #e8e8e8;

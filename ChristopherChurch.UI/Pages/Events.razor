@@ -1,66 +1,77 @@
 ﻿@page "/Events"
 @inject IEventsData _db
-<!--#TODO Create ADMIN Validation-->
-<!--#TODO Create Unique Event Name Validation-->
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="eventpage">
-                <h2 class="text-center">Events</h2>
+
+<CascadingAuthenticationState>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="eventpage">
+                    <h2 class="text-center">Events</h2>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        @if (events != null && events.Any())
-        {
-            @foreach (var eventModel in events)
+        <div class="row">
+            @if (events != null && events.Any())
             {
-                <div class="col-md-6">
-                    <div class="eventpage">
-                        <div class="card border-dark">
-                            <div class="card-body">
-                                <h5 class="card-title">@eventModel.EventName</h5>
-                                <p class="card-text">@eventModel.Description</p>
-                                <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <button class="btn btn-outline-primary rounded" @onclick="() => NavigateToEditEvent(eventModel)">Edit</button>
-                                            <button class="btn btn-outline-danger rounded" @onclick="() => NavigateToDeleteEvent(eventModel)">Delete</button>
+                @foreach (var eventModel in events)
+                {
+                    <div class="col-md-6">
+                        <div class="eventpage">
+                            <div class="card border-dark">
+                                <div class="card-body">
+                                    <h5 class="card-title">@eventModel.EventName</h5>
+                                    <p class="card-text">@eventModel.Description</p>
+                                    <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <AuthorizeView>
+                                                    <button class="btn btn-outline-primary rounded" @onclick="() => NavigateToEditEvent(eventModel)">Edit</button>
+                                                    <button class="btn btn-outline-danger rounded" @onclick="() => NavigateToDeleteEvent(eventModel)">Delete</button>
+                                                </AuthorizeView>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 my-2 d-flex justify-content-center">
+                    <div class="eventpage">
+                        <p>No current events available.</p>
+                    </div>
                 </div>
             }
-        }
-        else
-        {
+        </div>
+        <div class="row">
             <div class="col-12 my-2 d-flex justify-content-center">
-                <div class="eventpage">
-                    <p>No current events available.</p>
-                </div>
+                <AuthorizeView>
+                    <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
+                </AuthorizeView>
             </div>
-        }
-    </div>
-    <div class="row">
-        <div class="col-12 my-2 d-flex justify-content-center">
-            <button class="btn btn-outline-primary rounded" @onclick="NavigateToCreateEvent">Create Event</button>
         </div>
     </div>
-</div>
+</CascadingAuthenticationState>
+
 
 
 @code {
     private List<EventModel>? events;
     [Inject] private NavigationManager? NavigationManager { get; set; }
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        if (authenticationState is not null)
+        {
+            var state = await authenticationState;
+        }
         await LoadEvents();
-
     }
     private async Task LoadEvents()
     {

@@ -1,50 +1,52 @@
 ﻿@page "/Events/Create"
 @inject IEventsData _db
+@attribute [Authorize]
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using Microsoft.AspNetCore.Components.Authorization
 
-<!--TODO!!!! ADD ADMIN Validation-->
-<div class="eventpage">
-    @if (showSuccess)
-    {
-        <div>
-            <h4>Event successfully created!</h4>
-            <button class="btn btn-outline-primary rounded" @onclick="NavigateToEvents">Events</button>
-            <button class="btn btn-outline-danger rounded" @onclick="NavigateToHome">Back</button>
-        </div>
-    }
-    else
-    {
-        <h3>Create New Event</h3>
-
-        <EditForm Model="@newEvent" OnValidSubmit="@AddEvent">
-            <DataAnnotationsValidator />
-            <div class="form-group">
-                <label for="eventName">Event Name:</label>
-                <InputText id="eventName" @bind-Value="newEvent.EventName" class="form-control border-black" placeholder="ex. Church Dinner" />
-                <ValidationMessage For="@(() => newEvent.EventName)" />
+    <div class="eventpage">
+        @if (showSuccess)
+        {
+            <div>
+                <h4>Event successfully created!</h4>
+                <button class="btn btn-outline-primary rounded" @onclick="NavigateToEvents">Events</button>
+                <button class="btn btn-outline-danger rounded" @onclick="NavigateToHome">Back</button>
             </div>
+        }
+        else
+        {
+            <h3>Create New Event</h3>
 
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <InputTextArea id="description" @bind-Value="newEvent.Description" class="form-control border-black" placeholder="ex. Dinner at Church" />
-                <ValidationMessage For="@(() => newEvent.Description)" />
-            </div>
+            <EditForm Model="@newEvent" OnValidSubmit="@AddEvent">
+                <DataAnnotationsValidator />
+                <div class="form-group">
+                    <label for="eventName">Event Name:</label>
+                    <InputText id="eventName" @bind-Value="newEvent.EventName" class="form-control border-black" placeholder="ex. Church Dinner" />
+                    <ValidationMessage For="@(() => newEvent.EventName)" />
+                </div>
 
-            <div class="form-group">
-                <label for="eventDate">Event Date:</label>
-                <InputDate id="eventDate" @bind-Value="newEvent.EventDate" class="form-control border-black" />
-                <ValidationMessage For="@(() => newEvent.EventDate)" />
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 mt-3">
-                        <button type="submit" class="btn btn-outline-primary">Save Event</button>
-                        <button class="btn btn-outline-danger rounded" @onclick="NavigateToHome">Back</button>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <InputTextArea id="description" @bind-Value="newEvent.Description" class="form-control border-black" placeholder="ex. Dinner at Church" />
+                    <ValidationMessage For="@(() => newEvent.Description)" />
+                </div>
+
+                <div class="form-group">
+                    <label for="eventDate">Event Date:</label>
+                    <InputDate id="eventDate" @bind-Value="newEvent.EventDate" class="form-control border-black" />
+                    <ValidationMessage For="@(() => newEvent.EventDate)" />
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-outline-primary">Save Event</button>
+                            <button class="btn btn-outline-danger rounded" @onclick="NavigateToHome">Back</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </EditForm>
-    }
-</div>
+            </EditForm>
+        }
+    </div>
 
 @code {
     private DisplayEventModel newEvent = new DisplayEventModel { EventDate = DateTime.Today };
@@ -83,4 +85,4 @@
         NavigationManager!.NavigateTo("/");
     }
 
-    }
+}

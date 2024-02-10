@@ -9,9 +9,9 @@
             <h2>Profile</h2>
             <div class="col-md-4">
                 <h3>@Username</h3>
-                <p>Email: @Email</p>
-                <p>Picture: <img src="@Picture" alt="User Picture" /></p>
-                <!-- Add more fields as needed -->
+                <!--  <p>Email: @Email</p>
+      <p>Picture: <img src="@Picture" alt="User Picture" /></p>
+       Add more fields as needed -->
             </div>
         </div>
     </div>
@@ -21,17 +21,25 @@
     [CascadingParameter]
     public Task<AuthenticationState>? AuthenticationStateTask { get; set; }
     private string Username = "";
-    private string Email = "";
-    private string Picture = "";
+    //private string Email = "";
+    //private string Picture = "";
 
     protected override async Task OnInitializedAsync()
     {
         var state = await AuthenticationStateTask!;
 
-        Username = state.User.Identity?.Name ?? string.Empty;
-        Email = state.User.FindFirst("email")?.Value ?? string.Empty;
-        Picture = state.User.FindFirst("picture")?.Value ?? string.Empty;
+        Username = state.User.Identity!.Name ?? string.Empty;
 
+       /* EmailAddress = state.User.Claims
+            .Where(c => c.Type.Equals(System.Security.Claims.ClaimTypes.Email))
+            .Select(c => c.Value)
+            .FirstOrDefault() ?? string.Empty;
+
+        Picture = state.User.Claims
+            .Where(c => c.Type.Equals("picture"))
+            .Select(c => c.Value)
+            .FirstOrDefault() ?? string.Empty;
+       */
         await base.OnInitializedAsync();
     }
 }

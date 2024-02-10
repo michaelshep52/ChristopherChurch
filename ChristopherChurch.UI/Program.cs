@@ -8,39 +8,36 @@ using Auth0.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddTransient<IEventsData, EventsData>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IMinistryFormService,MinistryFormService>();
-builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddAuth0WebAppAuthentication(options =>
-{
-    try
+builder.Services
+    .AddAuth0WebAppAuthentication(options =>
     {
-        var domain = builder.Configuration["Auth0:Domain"];
-        var clientId = builder.Configuration["Auth0:ClientId"];
+        try
+        {
+            var domain = builder.Configuration["Auth0:Domain"];
+            var clientId = builder.Configuration["Auth0:ClientId"];
 
-        if (domain is not null && clientId is not null)
-        {
-            options.Domain = domain;
-            options.ClientId = clientId;
+            if (domain is not null && clientId is not null)
+            {
+                options.Domain = domain;
+                options.ClientId = clientId;
+            }
+            else
+            {
+                throw new InvalidOperationException("Auth0 domain or clientId is not configured.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            throw new InvalidOperationException("Auth0 domain or clientId is not configured.");
+            Console.WriteLine($"Error during Auth0 configuration: {ex.Message}");
         }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error during Auth0 configuration: {ex.Message}");
-    }
-});
+    });
 
 var emailSettings = new EmailSettings();
 builder.Configuration.Bind("EmailSettings", emailSettings);
@@ -67,14 +64,15 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseRouting();
-
+app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+app.MapRazorPages();
 
 app.Run();
 

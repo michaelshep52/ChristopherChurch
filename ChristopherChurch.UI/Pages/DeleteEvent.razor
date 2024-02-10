@@ -1,40 +1,44 @@
 ﻿@page "/Events/Delete/{EventName}"
 @inject IEventsData _db
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
 
-<div class="eventpage">
-    @if (deletionStage == DeletionStage.Confirmation)
-    {
-        <div class="container mb-3">
-            <p>Are you sure you want to delete the event?</p>
-            <button class="btn btn-outline-danger rounded" @onclick="EventDeletion">Yes, Delete</button>
-            <button class="btn btn-outline-primary rounded" @onclick="CancelDelete">Cancel</button>
-        </div>
-    }
-    else if (deletionStage == DeletionStage.Success)
-    {
-        <div class="container mb-3">
-            <h4>Event Deleted successfully!</h4>
-            <button class="btn btn-outline-primary rounded" @onclick="NavigateToEvents">Events</button>
-            <button class="btn btn-outline-secondary rounded" @onclick="NavigateToHome">Back</button>
-        </div>
-    }
-    else
-    {
-        <h3>Delete Event</h3>
-        <p>Are you sure you want to delete event @deleteEvent?.EventName?</p>
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <button class="btn btn-outline-danger rounded" @onclick="ConfirmDelete">Delete</button>
-                    <button class="btn btn-outline-primary rounded" @onclick="NavigateToHome">Back</button>
+    <div class="eventpage">
+        @if (deletionStage == DeletionStage.Confirmation)
+        {
+            <div class="container mb-3">
+                <p>Are you sure you want to delete the event?</p>
+                <button class="btn btn-outline-danger rounded" @onclick="EventDeletion">Yes, Delete</button>
+                <button class="btn btn-outline-primary rounded" @onclick="CancelDelete">Cancel</button>
+            </div>
+        }
+        else if (deletionStage == DeletionStage.Success)
+        {
+            <div class="container mb-3">
+                <h4>Event Deleted successfully!</h4>
+                <button class="btn btn-outline-primary rounded" @onclick="NavigateToEvents">Events</button>
+                <button class="btn btn-outline-secondary rounded" @onclick="NavigateToHome">Back</button>
+            </div>
+        }
+        else
+        {
+            <h3>Delete Event</h3>
+            <p>Are you sure you want to delete event @deleteEvent?.EventName?</p>
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-outline-danger rounded" @onclick="ConfirmDelete">Delete</button>
+                        <button class="btn btn-outline-primary rounded" @onclick="NavigateToHome">Back</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
 
 @code {
     private EventModel? deleteEvent;
+    [Parameter] public string? EventName { get; set; }
+
     private DeletionStage deletionStage = DeletionStage.Initial;
 
     private enum DeletionStage
@@ -43,11 +47,6 @@
         Confirmation,
         Success
     }
-
-    [Inject] private NavigationManager? NavigationManager { get; set; }
-
-    [Parameter] public string? EventName { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
         await LoadEvent();
