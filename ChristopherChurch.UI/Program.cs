@@ -14,6 +14,8 @@ builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddTransient<IEventsData, EventsData>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IMinistryFormService,MinistryFormService>();
+builder.Services.AddScoped<IGoogleCalendarService, GoogleCalendarService>();
+
 
 builder.Services
     .AddAuth0WebAppAuthentication(options =>
