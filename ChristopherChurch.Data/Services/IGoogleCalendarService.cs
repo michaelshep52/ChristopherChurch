@@ -2,6 +2,6 @@
 {
     public interface IGoogleCalendarService
     {
-        Task AddEventAsync(string eventName);
+        Task AddEventAsync(string eventName, string userToken);
     }
 }

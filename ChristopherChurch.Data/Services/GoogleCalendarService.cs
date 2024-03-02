@@ -1,11 +1,14 @@
 ﻿using ChristopherChurch.Data.DataAccess;
 using ChristopherChurch.Data.Models;
 using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -25,12 +28,10 @@ namespace ChristopherChurch.Data.Services
             _db = db;
         }
 
-        public async Task AddEventAsync(string eventName)
+        public async Task AddEventAsync(string eventName, string userToken)
         {
             try
             {
-                // Handle Auth0 authentication here
-
                 // Use _db service to get the event details from the database
                 var databaseEvent = await _db.GetEventByName(eventName);
 
@@ -41,12 +42,12 @@ namespace ChristopherChurch.Data.Services
                     {
                         Summary = databaseEvent.EventName,
                         Description = databaseEvent.Description,
-                        Start = new EventDateTime { DateTimeDateTimeOffset = databaseEvent.EventDate, TimeZone = "Eastern Standard Time" },
-                        End = new EventDateTime { DateTimeDateTimeOffset = databaseEvent.EventDate.AddHours(1), TimeZone = "Eastern Standard Time" },
+                        Start = new EventDateTime { DateTime = databaseEvent.EventDate, TimeZone = "Eastern Standard Time" },
+                        End = new EventDateTime { DateTime = databaseEvent.EventDate.AddHours(1), TimeZone = "Eastern Standard Time" },
                     };
 
                     // Call the backend service to add the event to Google Calendar
-                    await AddEventToGoogleCalendar(calendarEvent);
+                    await AddEventToGoogleCalendar(calendarEvent, userToken);
 
                     // Handle any additional logic after adding the event
                 }
@@ -61,24 +62,22 @@ namespace ChristopherChurch.Data.Services
             }
         }
 
-        private async Task AddEventToGoogleCalendar(Event calendarEvent)
+        private async Task AddEventToGoogleCalendar(Event calendarEvent, string userToken)
         {
             // Retrieve sensitive data from appsettings.json
             var credentialsPath = _configuration["GoogleApi:Credentials"];
-            var clientSecretPath = _configuration["GoogleApi:ClientSecret"];
 
-            UserCredential credential;
+            // Use ClientSecrets directly
+            var clientSecrets = await GoogleClientSecrets.FromFileAsync(credentialsPath);
 
-            using (var stream = new FileStream(clientSecretPath, FileMode.Open, FileAccess.Read))
-            {
-                credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "user",
-                    default,
-                    default,
-                    default);
-            }
+            var credential = new UserCredential(new GoogleAuthorizationCodeFlow(
+                new GoogleAuthorizationCodeFlow.Initializer
+                {
+                    ClientSecrets = clientSecrets.Secrets, // Use Secrets directly
+                    Scopes = Scopes,
+                }),
+                "user",
+                new TokenResponse { AccessToken = userToken });
 
             var service = new CalendarService(new BaseClientService.Initializer
             {

@@ -1,7 +1,9 @@
 ﻿@page "/Events/Display"
 @inject IEventsData _db
+@inject IJSRuntime JSRuntime
+@inject GoogleApiSettings GoogleApiSettings
+@inject IGoogleCalendarService GoogleCalendarService
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject IGoogleCalendarService _googleCalendarService
 
 
 
@@ -62,6 +64,10 @@
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationState { get; set; }
 
+    private string? googleUserToken;
+    private bool hasCalledJsInterop = false;
+
+
     protected override async Task OnInitializedAsync()
     {
         if (authenticationState is not null)
@@ -69,6 +75,28 @@
             var state = await authenticationState;
         }
         await LoadEvents();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            if (firstRender && !hasCalledJsInterop)
+            {
+                // Call the JavaScript function using JSInterop
+                googleUserToken = await JSRuntime.InvokeAsync<string>("googleInterop.getGoogleUserToken");
+
+                // Set the flag to true to ensure the interop call is not made again
+                hasCalledJsInterop = true;
+
+                // StateHasChanged is needed to trigger a re-render and update the UI with the new value
+                StateHasChanged();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading events: {ex.Message}");
+        }
     }
 
     private async Task LoadEvents()
@@ -112,16 +140,28 @@
     {
         NavigationManager!.NavigateTo("/Events");
     }
-    private async Task AddToGoogleCalendar(string EventName)
+
+    private async Task AddToGoogleCalendar(string eventName)
     {
-        if (EventName != null)
+        try
         {
-            // Handle Auth0 authentication here
-            await _googleCalendarService.AddEventAsync(EventName);
+            var userToken = await JSRuntime.InvokeAsync<string>("googleInterop.getGoogleUserToken");
+
+            if (!string.IsNullOrEmpty(userToken))
+            {
+                // Call the backend service to add the event to Google Calendar
+                await GoogleCalendarService.AddEventAsync(eventName, userToken);
+
+                // Handle any additional logic after adding the event
+            }
+            else
+            {
+                Console.WriteLine("Error: Unable to get Google user token.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine("Error: Current event is null.");
+            Console.WriteLine($"Error adding event to Google Calendar: {ex.Message}");
         }
     }
 }
