@@ -1,7 +1,11 @@
-﻿namespace ChristopherChurch.Data.Services
+﻿using ChristopherChurch.Data.Models;
+using Google.Apis.Calendar.v3.Data;
+
+namespace ChristopherChurch.Data.Services
 {
     public interface IGoogleCalendarService
     {
-        Task AddEventAsync(string eventName, string userToken);
+        string GetEventAddToGoogleCalendarLink(Event websiteEvent);
+        Task<List<EventModel>> GetPublicEventsAsync();
     }
 }

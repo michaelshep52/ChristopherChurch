@@ -5,6 +5,8 @@ using ChristopherChurch.Data.Services;
 using QuestPDF.Infrastructure;
 using ChristopherChurch.Data.Models;
 using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +18,27 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IMinistryFormService,MinistryFormService>();
 builder.Services.AddScoped<IGoogleCalendarService, GoogleCalendarService>();
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 
-builder.Services
+})
+    .AddCookie()
+    .AddOpenIdConnect(options =>
+    {
+        options.Authority = "https://" + builder.Configuration["Auth0:Domain"];
+        options.ClientId = builder.Configuration["Auth0:ClientId"];
+        options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
+        options.ResponseType = "code";
+        options.Scope.Add("openid");
+        options.Scope.Add("profile");
+        options.CallbackPath = builder.Configuration["Auth0:CallbackPath"];
+        options.ClaimsIssuer = "Auth0";
+        options.SaveTokens = true;
+    });
+
+/*builder.Services
     .AddAuth0WebAppAuthentication(options =>
     {
         try
@@ -39,7 +60,7 @@ builder.Services
         {
             Console.WriteLine($"Error during Auth0 configuration: {ex.Message}");
         }
-    });
+    });*/
 
 var emailSettings = new EmailSettings();
 builder.Configuration.Bind("EmailSettings", emailSettings);

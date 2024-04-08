@@ -19,9 +19,11 @@
                         <div class="eventpage">
                             <div class="card border-dark">
                                 <div class="card-body">
-                                    <h5 class="card-title">@eventModel.EventName</h5>
+                                    <h5 class="card-title">@eventModel.Summary</h5>
                                     <p class="card-text">@eventModel.Description</p>
-                                    <p class="card-text">Event Date: @eventModel.EventDate.ToShortDateString()</p>
+                                    <p class="card-text">Start Event Date: @eventModel.StartDateTime.ToShortDateString()</p>
+                                    <p class="card-text">End Event Date: @eventModel.EndDateTime.ToShortDateString()</p>
+                                    <p class="card-text">@eventModel.Location</p>
                                     <div class="container">
                                         <div class="row">
                                             <div class="col-12">
@@ -89,22 +91,22 @@
     {
         if (eventModel != null)
         {
-            NavigationManager!.NavigateTo($"/Events/Edit/{eventModel.EventName}");
+            NavigationManager!.NavigateTo($"/Events/Edit/{eventModel.Summary}");
         }
         else
         {
-            Console.WriteLine($"Error: Event not found for EventName: {eventModel!.EventName}");
+            Console.WriteLine($"Error: Event not found for EventName: {eventModel!.Summary}");
         }
     }
     private void NavigateToDeleteEvent(EventModel eventModel)
     {
         if (eventModel != null)
         {
-            NavigationManager!.NavigateTo($"/Events/Delete/{eventModel.EventName}");
+            NavigationManager!.NavigateTo($"/Events/Delete/{eventModel.Summary}");
         }
         else
         {
-            Console.WriteLine($"Error: Event not found for EventName: {eventModel!.EventName}");
+            Console.WriteLine($"Error: Event not found for EventName: {eventModel!.Summary}");
         }
     }
     private void NavigateToCreateEvent()

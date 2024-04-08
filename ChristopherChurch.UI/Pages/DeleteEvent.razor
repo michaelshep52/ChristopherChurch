@@ -23,7 +23,7 @@
         else
         {
             <h3>Delete Event</h3>
-            <p>Are you sure you want to delete event @deleteEvent?.EventName?</p>
+            <p>Are you sure you want to delete event @deleteEvent?.Summary?</p>
             <div class="container">
                 <div class="row">
                     <div class="col-12">
@@ -95,7 +95,7 @@
         {
             if (deleteEvent != null)
             {
-                await _db.DeleteEvent(deleteEvent.EventName);
+                await _db.DeleteEvent(deleteEvent.Summary);
                 deletionStage = DeletionStage.Success;
             }
             else

@@ -60,9 +60,10 @@
         {
             EventModel newEventModel = new EventModel
             {
-                EventName = newEvent.EventName!,
+                Summary = newEvent.EventName!,
                 Description = newEvent.Description!,
-                EventDate = newEvent.EventDate
+                StartDateTime = newEvent.EventDate!,
+                EndDateTime = newEvent.EventDate
             };
             showSuccess = true;
 

@@ -1,92 +1,141 @@
-﻿using ChristopherChurch.Data.DataAccess;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ChristopherChurch.Data.Models;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Auth.OAuth2.Flows;
-using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
-using Google.Apis.Util.Store;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-
+//TODO Create Authentication for users to login
 namespace ChristopherChurch.Data.Services
 {
     public class GoogleCalendarService : IGoogleCalendarService
     {
-        private readonly string[] Scopes = { CalendarService.Scope.Calendar };
-        private readonly string ApplicationName = "Christopher Church";
-
         private readonly IConfiguration _configuration;
-        private readonly IEventsData _db;
+        private readonly string _googleCalendarId;
+        private readonly AuthenticationStateProvider _authStateProvider;
 
-        public GoogleCalendarService(IConfiguration configuration, IEventsData db)
+        public GoogleCalendarService(AuthenticationStateProvider authStateProvider, IConfiguration configuration)
         {
             _configuration = configuration;
-            _db = db;
+            _googleCalendarId = _configuration["GoogleApi:CalendarId"];
+            _authStateProvider = authStateProvider;
         }
 
-        public async Task AddEventAsync(string eventName, string userToken)
+        public async Task<List<EventModel>> GetPublicEventsAsync()
         {
             try
             {
-                // Use _db service to get the event details from the database
-                var databaseEvent = await _db.GetEventByName(eventName);
+                var service = await GetCalendarServiceAsync();
 
-                if (databaseEvent != null)
+                var request = service.Events.List(_googleCalendarId);
+                request.TimeMin = DateTime.Now;
+                request.ShowDeleted = false;
+                request.SingleEvents = true;
+                request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+                var events = await request.ExecuteAsync();
+
+                var eventModels = new List<EventModel>();
+
+                if (events.Items != null && events.Items.Count > 0)
                 {
-                    // Create and fill the event details from the database
-                    var calendarEvent = new Event
+                    foreach (var eventItem in events.Items)
                     {
-                        Summary = databaseEvent.EventName,
-                        Description = databaseEvent.Description,
-                        Start = new EventDateTime { DateTime = databaseEvent.EventDate, TimeZone = "Eastern Standard Time" },
-                        End = new EventDateTime { DateTime = databaseEvent.EventDate.AddHours(1), TimeZone = "Eastern Standard Time" },
-                    };
+                        if (IsEventPublic(eventItem))
+                        {
+                            var eventModel = new EventModel
+                            {
+                                EventId = eventItem.Id,
+                                Summary = eventItem.Summary,
+                                Description = eventItem.Description,
+                                StartDateTime = eventItem.Start.DateTime ?? DateTime.MinValue,
+                                EndDateTime = eventItem.End.DateTime ?? DateTime.MinValue,
+                                Location = eventItem.Location,
+                                AddToCalendarLink = GetEventAddToGoogleCalendarLink(eventItem)
+                            };
 
-                    // Call the backend service to add the event to Google Calendar
-                    await AddEventToGoogleCalendar(calendarEvent, userToken);
+                            eventModels.Add(eventModel);
+                        }
+                    }
+                }
 
-                    // Handle any additional logic after adding the event
-                }
-                else
-                {
-                    Console.WriteLine("Error: Event not found in the database.");
-                }
+                return eventModels;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error adding event to Google Calendar: {ex.Message}");
+                Console.WriteLine($"Error loading events: {ex.Message}");
+                throw;
             }
         }
 
-        private async Task AddEventToGoogleCalendar(Event calendarEvent, string userToken)
+        private bool IsEventPublic(Event eventItem)
         {
-            // Retrieve sensitive data from appsettings.json
-            var credentialsPath = _configuration["GoogleApi:Credentials"];
+            // Check if the event visibility is set to "public"
+            if (eventItem.Visibility != null && eventItem.Visibility.ToLower() == "public")
+            {
+                return true;
+            }
 
-            // Use ClientSecrets directly
-            var clientSecrets = await GoogleClientSecrets.FromFileAsync(credentialsPath);
+            return false; 
+        }
 
-            var credential = new UserCredential(new GoogleAuthorizationCodeFlow(
-                new GoogleAuthorizationCodeFlow.Initializer
-                {
-                    ClientSecrets = clientSecrets.Secrets, // Use Secrets directly
-                    Scopes = Scopes,
-                }),
-                "user",
-                new TokenResponse { AccessToken = userToken });
-
-            var service = new CalendarService(new BaseClientService.Initializer
+        private async Task<CalendarService> GetCalendarServiceAsync()
+        {
+            var credential = await GetGoogleCredentials();
+            return new CalendarService(new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
+                ApplicationName = "Christopher Church",
             });
+        }
 
-            // Insert the event
-            await service.Events.Insert(calendarEvent, "primary").ExecuteAsync();
+        private async Task<UserCredential> GetGoogleCredentials()
+        {
+            var authState = await _authStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity!.IsAuthenticated)
+            {
+                var accessTokenClaim = user.FindFirst("access_token");
+
+                if (accessTokenClaim != null)
+                {
+                    return GoogleCredential.FromAccessToken(accessTokenClaim.Value).CreateScoped(CalendarService.Scope.Calendar).UnderlyingCredential as UserCredential;
+                }
+                else
+                {
+                    throw new UnauthorizedAccessException("Access token not found in user claims");
+                }
+            }
+            else
+            {
+                throw new UnauthorizedAccessException("User is not authenticated");
+            }
+        }
+        
+        public string GetEventAddToGoogleCalendarLink(Event websiteEvent)
+        {
+            // Ensure that Start and End properties are not null
+            if (websiteEvent.Start == null || websiteEvent.End == null)
+            {
+                throw new InvalidOperationException("Start or End time of the event is null.");
+            }
+
+            // Construct the Google Calendar event URL with the event details
+            var baseUrl = "https://www.google.com/calendar/render?action=TEMPLATE";
+            var summary = Uri.EscapeDataString(websiteEvent.Summary);
+            var description = Uri.EscapeDataString(websiteEvent.Description);
+            var location = Uri.EscapeDataString(websiteEvent.Location);
+            var startDateTime = websiteEvent.Start.DateTimeDateTimeOffset.ToString();
+            var endDateTime = websiteEvent.End.DateTimeDateTimeOffset.ToString();
+
+            // Construct the complete URL
+            var url = $"{baseUrl}&text={summary}&details={description}&location={location}&dates={startDateTime}/{endDateTime}";
+
+            return url;
         }
     }
 }
